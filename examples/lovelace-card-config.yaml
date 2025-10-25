@@ -1,0 +1,84 @@
+# ============================================================================
+# Lovelace Card Configuration Examples
+# ============================================================================
+
+# ============================================================================
+# Minimal Configuration
+# ============================================================================
+type: custom:temperature-scheduler-card
+title: Temperature Schedule
+entity_prefix: temperature_hour_
+
+# ============================================================================
+# Full Configuration
+# ============================================================================
+type: custom:temperature-scheduler-card
+title: Temperature Schedule
+entity_prefix: temperature_hour_
+pause_entity: input_boolean.temperature_schedule_paused
+profiles_select_entity: input_select.temperature_profiles
+save_script: script.save_temperature_profile
+load_script: script.load_temperature_profile
+hour_base: auto  # 'auto' | 0 | 1
+chartjs_path: /local/chart.min.js
+dragdata_path: /local/chartjs-plugin-dragdata.min.js
+
+# ============================================================================
+# Multiple Cards Example (different zones)
+# ============================================================================
+
+# Living Room
+type: custom:temperature-scheduler-card
+title: Living Room Temperature
+entity_prefix: temperature_living_
+pause_entity: input_boolean.temperature_schedule_living_paused
+profiles_select_entity: input_select.temperature_profiles_living
+save_script: script.save_temperature_profile_living
+load_script: script.load_temperature_profile_living
+
+# Bedroom
+type: custom:temperature-scheduler-card
+title: Bedroom Temperature
+entity_prefix: temperature_bedroom_
+pause_entity: input_boolean.temperature_schedule_bedroom_paused
+profiles_select_entity: input_select.temperature_profiles_bedroom
+save_script: script.save_temperature_profile_bedroom
+load_script: script.load_temperature_profile_bedroom
+
+# ============================================================================
+# Dashboard Layout Examples
+# ============================================================================
+
+# Single Column (Mobile/Tablet)
+views:
+  - title: Temperature
+    cards:
+      - type: custom:temperature-scheduler-card
+        title: Temperature Schedule
+        entity_prefix: temperature_hour_
+
+# Two Columns (Desktop)
+views:
+  - title: Temperature
+    type: horizontal-stack
+    cards:
+      - type: custom:temperature-scheduler-card
+        title: Living Room
+        entity_prefix: temperature_living_
+      - type: custom:temperature-scheduler-card
+        title: Bedroom
+        entity_prefix: temperature_bedroom_
+
+# Vertical Stack with Controls
+views:
+  - title: Temperature
+    cards:
+      - type: custom:temperature-scheduler-card
+        title: Temperature Schedule
+        entity_prefix: temperature_hour_
+      
+      - type: entities
+        title: Quick Controls
+        entities:
+          - input_boolean.temperature_schedule_paused
+          - input_select.temperature_profiles

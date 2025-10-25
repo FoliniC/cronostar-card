@@ -1,0 +1,251 @@
+# ============================================================================
+# Temperature Scheduler Card - Full Setup Example
+# ============================================================================
+# Copy this to your configuration.yaml or packages/temperature_scheduler.yaml
+# ============================================================================
+
+# ============================================================================
+# Input Numbers - 24 hours (00-23)
+# ============================================================================
+input_number:
+  temperature_hour_00:
+    name: "Temperature 00:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_01:
+    name: "Temperature 01:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_02:
+    name: "Temperature 02:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_03:
+    name: "Temperature 03:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_04:
+    name: "Temperature 04:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_05:
+    name: "Temperature 05:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_06:
+    name: "Temperature 06:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_07:
+    name: "Temperature 07:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_08:
+    name: "Temperature 08:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_09:
+    name: "Temperature 09:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_10:
+    name: "Temperature 10:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_11:
+    name: "Temperature 11:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_12:
+    name: "Temperature 12:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_13:
+    name: "Temperature 13:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_14:
+    name: "Temperature 14:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_15:
+    name: "Temperature 15:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_16:
+    name: "Temperature 16:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_17:
+    name: "Temperature 17:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_18:
+    name: "Temperature 18:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_19:
+    name: "Temperature 19:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_20:
+    name: "Temperature 20:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_21:
+    name: "Temperature 21:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_22:
+    name: "Temperature 22:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+  
+  temperature_hour_23:
+    name: "Temperature 23:00"
+    min: 15
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer
+
+# ============================================================================
+# Input Boolean - Pause schedule
+# ============================================================================
+input_boolean:
+  temperature_schedule_paused:
+    name: "Pause Temperature Schedule"
+    icon: mdi:pause
+
+# ============================================================================
+# Input Select - Profile selector
+# ============================================================================
+input_select:
+  temperature_profiles:
+    name: "Temperature Profiles"
+    options:
+      - Eco
+      - Comfort
+      - Away
+      - Night
+    icon: mdi:notebook
+
+# ============================================================================
+# Input Text - Profile storage (JSON format)
+# ============================================================================
+input_text:
+  temperature_profile_eco:
+    name: "Profile Eco (JSON)"
+    max: 255
+    initial: "[18,18,18,18,18,19,20,21,21,21,21,21,21,21,21,20,20,19,19,18,18,18,18,18]"
+  
+  temperature_profile_comfort:
+    name: "Profile Comfort (JSON)"
+    max: 255
+    initial: "[20,20,20,20,20,21,22,23,23,23,23,23,23,23,23,22,22,21,21,20,20,20,20,20]"
+  
+  temperature_profile_away:
+    name: "Profile Away (JSON)"
+    max: 255
+    initial: "[16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16]"
+  
+  temperature_profile_night:
+    name: "Profile Night (JSON)"
+    max: 255
+    initial: "[17,17,17,17,17,17,18,19,20,21,22,22,22,22,21,20,20,19,18,18,17,17,17,17]"
+
+# ============================================================================
+# Scripts - Save and Load (copy from scripts/temperature_profiles.yaml)
+# ============================================================================
+script: !include scripts/temperature_profiles.yaml

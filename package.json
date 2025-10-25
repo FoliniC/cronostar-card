@@ -1,0 +1,48 @@
+{
+  "name": "temperature-scheduler-card",
+  "version": "2.18.0",
+  "type": "module",
+  "description": "A powerful temperature scheduler card for Home Assistant with visual hourly control",
+  "main": "dist/temperature-scheduler-card.js",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/temperature-scheduler-card.git"
+  },
+  "keywords": [
+    "home-assistant",
+    "homeassistant",
+    "hacs",
+    "lovelace",
+    "custom-card",
+    "temperature",
+    "scheduler",
+    "thermostat"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/temperature-scheduler-card/issues"
+  },
+  "homepage": "https://github.com/YOUR_USERNAME/temperature-scheduler-card#readme",
+  "devDependencies": {
+    "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@eslint/js": "^9.38.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.8",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "eslint": "^9.5.0",
+    "globals": "^16.4.0",
+    "rollup": "^4.18.0"
+  },
+  "dependencies": {
+    "lit-element": "^2.5.1"
+  }
+}
