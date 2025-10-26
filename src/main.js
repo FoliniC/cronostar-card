@@ -4,6 +4,7 @@
  */
 
 import { TemperatureSchedulerCard } from './temperature-scheduler-card.js';
+import { VERSION } from './config.js';
 
 // Register custom element
 customElements.define('temperature-scheduler-card', TemperatureSchedulerCard);
@@ -19,7 +20,7 @@ window.customCards.push({
 });
 
 console.info(
-  `%c TEMPERATURE-SCHEDULER-CARD %c v${TemperatureSchedulerCard.VERSION || '2.18.0'} `,
+  `%c TEMPERATURE-SCHEDULER-CARD %c v${VERSION} `,
   'color: white; background: #03a9f4; font-weight: 700;',
   'color: #03a9f4; background: white; font-weight: 700;'
 );

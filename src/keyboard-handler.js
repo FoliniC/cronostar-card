@@ -1,3 +1,4 @@
+
 /**
  * Keyboard input handling for Temperature Scheduler Card
  * @module keyboard-handler
@@ -45,6 +46,12 @@ export class KeyboardHandler {
     if (e.key === "Meta") {
       this.metaDown = true;
       return;
+    }
+
+    if ((this.ctrlDown || this.metaDown) && e.key === 'a') {
+        e.preventDefault();
+        this.card.selectionManager.selectAll();
+        return;
     }
 
     if (e.key === "Escape") {
@@ -106,18 +113,23 @@ export class KeyboardHandler {
   handleArrowLeftRight(e, indices) {
     e.preventDefault();
 
-    const selMgr = this.card.selectionManager;
     const stateMgr = this.card.stateManager;
     const chartMgr = this.card.chartManager;
-    
-    const anchorIdx = selMgr.getAnchor() ?? indices[0];
     const dataset = chartMgr.chart.data.datasets[0];
-    const anchorVal = dataset.data[anchorIdx] ?? stateMgr.scheduleData[anchorIdx];
-    const rounded = roundTo(anchorVal, 1);
+
+    let targetIndex;
+    if (e.key === "ArrowLeft") {
+      targetIndex = Math.min(...indices);
+    } else { // ArrowRight
+      targetIndex = Math.max(...indices);
+    }
+
+    const targetVal = dataset.data[targetIndex] ?? stateMgr.scheduleData[targetIndex];
+    const rounded = roundTo(targetVal, 1);
 
     Logger.key(
-      `${e.key} -> align to anchor: idx=${anchorIdx} ` +
-      `(${stateMgr.getHourLabel(anchorIdx)}) value=${rounded} ` +
+      `${e.key} -> align to index: ${targetIndex} ` +
+      `(${stateMgr.getHourLabel(targetIndex)}) value=${rounded} ` +
       `indices=${JSON.stringify(indices)}`
     );
 
@@ -129,7 +141,7 @@ export class KeyboardHandler {
     });
     stateMgr.setData(newData);
 
-    chartMgr.updatePointStyling(selMgr.selectedPoint, selMgr.selectedPoints);
+    chartMgr.updatePointStyling(this.card.selectionManager.selectedPoint, this.card.selectionManager.selectedPoints);
     chartMgr.update();
     chartMgr.showDragValueDisplay(indices, dataset.data);
   }

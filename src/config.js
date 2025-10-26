@@ -3,7 +3,7 @@
  * @module config
  */
 
-export const VERSION = '2.18.0';
+export const VERSION = '2.20.0';
 
 export const DEFAULT_CONFIG = {
   title: "Temperature Scheduler",

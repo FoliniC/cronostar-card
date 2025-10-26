@@ -3,128 +3,378 @@
  * @module styles
  */
 
-import { css } from 'lit-element';
+
+
+import { css } from 'lit';
+
+
 
 export const cardStyles = css`
+
   ha-card {
+
     padding: 16px;
+
     height: 100%;
+
     box-sizing: border-box;
+
     display: flex;
+
     flex-direction: column;
-  }
-  
-  .card-content {
-    flex-grow: 1;
+
     position: relative;
-    display: flex;
-    flex-direction: column;
+
   }
+
   
-  .chart-container {
-    position: relative;
-    flex-grow: 1;
-    min-height: 300px;
-    user-select: none;
-    outline: none;
-  }
-  
-  .loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
+
+  .card-header {
+
     display: flex;
-    justify-content: center;
+
+    justify-content: space-between;
+
     align-items: center;
-    z-index: 10;
-    font-size: 14px;
-    color: var(--primary-text-color);
+
+    padding-bottom: 8px;
+
   }
-  
-  .selection-rect {
-    position: absolute;
-    border: 2px dashed var(--primary-color, #03a9f4);
-    background: rgba(3, 169, 244, 0.15);
-    display: none;
-    pointer-events: none;
-    z-index: 20;
-    border-radius: 4px;
-  }
-  
-  canvas {
-    cursor: ns-resize;
-    touch-action: none;
-  }
-  
-  .drag-value-display {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: var(--card-background-color, white);
-    border: 1px solid var(--divider-color, #e0e0e0);
-    padding: 4px 8px;
-    border-radius: 4px;
-    display: none;
-    z-index: 100;
-    font-size: 12px;
+
+
+
+  .name {
+
+    font-size: 1.2rem;
+
     font-weight: 500;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    white-space: nowrap;
+
   }
-  
-  .controls {
+
+
+
+        .menu-button {
+
+
+
+          background: none;
+
+
+
+          border: none;
+
+
+
+          cursor: pointer;
+
+
+
+          padding: 0;
+
+
+
+          position: absolute;
+
+
+
+          top: 12px;
+
+
+
+          right: 12px;
+
+
+
+        }
+
+
+
+        .menu-button svg {
+
+
+
+          fill: var(--primary-text-color);
+
+
+
+        }
+
+
+
+      
+
+
+
+        .language-menu mwc-button {
+
+
+
+          margin: 0 4px;
+
+
+
+        }
+
+
+
+  .menu-content {
+
+    position: absolute;
+
+    top: 48px;
+
+    right: 8px;
+
+    background: var(--card-background-color, white);
+
+    border: 1px solid var(--divider-color, #e0e0e0);
+
+    border-radius: 4px;
+
+    z-index: 100;
+
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+
+  }
+
+
+
+  .language-menu {
+
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 16px;
+
     align-items: center;
-    padding-top: 12px;
-    border-top: 1px solid var(--divider-color, #e0e0e0);
+
+    padding: 0 8px;
+
   }
-  
-  .control-group {
+
+
+
+  .card-content {
+
+    flex-grow: 1;
+
+    position: relative;
+
     display: flex;
-    align-items: center;
-    gap: 8px;
+
+    flex-direction: column;
+
   }
+
   
-  .control-group span {
+
+  .chart-container {
+
+    position: relative;
+
+    flex-grow: 1;
+
+    min-height: 300px;
+
+    user-select: none;
+
+    outline: none;
+
+  }
+
+  
+
+  .loading-overlay {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    background: rgba(255, 255, 255, 0.8);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 10;
+
     font-size: 14px;
+
     color: var(--primary-text-color);
+
   }
+
   
-  ha-select {
-    min-width: 180px;
+
+  .selection-rect {
+
+    position: absolute;
+
+    border: 2px dashed var(--primary-color, #03a9f4);
+
+    background: rgba(3, 169, 244, 0.15);
+
+    display: none;
+
+    pointer-events: none;
+
+    z-index: 20;
+
+    border-radius: 4px;
+
   }
+
   
-  mwc-button {
-    --mdc-theme-primary: var(--primary-color);
+
+  canvas {
+
+    cursor: ns-resize;
+
+    touch-action: none;
+
   }
+
   
-  .unsaved-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
+
+  .drag-value-display {
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    background: var(--card-background-color, white);
+
+    border: 1px solid var(--divider-color, #e0e0e0);
+
+    padding: 4px 8px;
+
+    border-radius: 4px;
+
+    display: none;
+
+    z-index: 100;
+
     font-size: 12px;
-    color: var(--warning-color, #ff9800);
+
+    font-weight: 500;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    white-space: nowrap;
+
   }
+
   
-  @media (max-width: 600px) {
-    .controls {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    
-    .control-group {
-      width: 100%;
-      justify-content: space-between;
-    }
-    
-    ha-select {
-      width: 100%;
-    }
+
+  .controls {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 16px;
+
+    align-items: center;
+
+    padding-top: 12px;
+
+    border-top: 1px solid var(--divider-color, #e0e0e0);
+
   }
+
+  
+
+  .control-group {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+  }
+
+  
+
+  .control-group span {
+
+    font-size: 14px;
+
+    color: var(--primary-text-color);
+
+  }
+
+  
+
+  ha-select {
+
+    min-width: 180px;
+
+  }
+
+  
+
+  mwc-button {
+
+    --mdc-theme-primary: var(--primary-color);
+
+  }
+
+  
+
+  .unsaved-indicator {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    font-size: 12px;
+
+    color: var(--warning-color, #ff9800);
+
+  }
+
+  
+
+  @media (max-width: 600px) {
+
+    .controls {
+
+      flex-direction: column;
+
+      align-items: stretch;
+
+    }
+
+    
+
+    .control-group {
+
+      width: 100%;
+
+      justify-content: space-between;
+
+    }
+
+    
+
+    ha-select {
+
+      width: 100%;
+
+    }
+
+  }
+
 `;

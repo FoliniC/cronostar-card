@@ -1,3 +1,4 @@
+
 /**
  * Chart.js management for Temperature Scheduler Card
  * @module chart-manager
@@ -83,12 +84,14 @@ export class ChartManager {
     const ctx = canvas.getContext("2d");
     if (!ctx) return false;
 
+    const localize = (key, search, replace) => this.card.localizationManager.localize(key, search, replace);
+
     this.chart = new window.Chart(ctx, {
       type: "line",
       data: {
         labels: Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '0')}:00`),
         datasets: [{
-          label: "Temperatura (°C)",
+          label: localize('ui.temperature_label'),
           data: this.card.stateManager.scheduleData,
           backgroundColor: COLORS.primaryLight,
           borderColor: COLORS.primary,
@@ -109,6 +112,7 @@ export class ChartManager {
       this.card.selectionManager?.selectedPoints
     );
     this.chart.update();
+    this.updateChartLabels(); // Ensure labels are set on initial load
 
     Logger.log('CHART', "Chart initialized successfully");
     return true;
@@ -119,6 +123,7 @@ export class ChartManager {
    * @returns {Object}
    */
   getChartOptions() {
+    const localize = (key, search, replace) => this.card.localizationManager.localize(key, search, replace);
     return {
       responsive: true,
       maintainAspectRatio: false,
@@ -131,13 +136,13 @@ export class ChartManager {
           suggestedMax: CHART_DEFAULTS.suggestedMaxTemperature,
           title: {
             display: true,
-            text: 'Temperatura (°C)'
+            text: localize('ui.temperature_label'),
           }
         },
         x: {
           title: {
             display: true,
-            text: 'Ora del Giorno'
+            text: localize('ui.time_label'),
           }
         }
       },
@@ -319,11 +324,12 @@ export class ChartManager {
     const displayElement = this.card.shadowRoot?.getElementById('drag-value-display');
     if (!displayElement || indices.length === 0) return;
 
+    const localize = (key, search, replace) => this.card.localizationManager.localize(key, search, replace);
     const leftmostIndex = Math.min(...indices);
     const leftmostValue = data[leftmostIndex];
     
     displayElement.style.display = 'block';
-    displayElement.textContent = `Valore: ${leftmostValue}°C`;
+    displayElement.textContent = localize('ui.value_display', '{value}', leftmostValue);
 
     const meta = this.chart.getDatasetMeta(0);
     const pointElement = meta.data[leftmostIndex];
@@ -414,5 +420,26 @@ export class ChartManager {
    */
   getChart() {
     return this.chart;
+  }
+
+  updateChartLabels() {
+    if (!this.chart) {
+        console.log('[CHART] updateChartLabels: Chart not initialized');
+        return;
+    }
+    console.log('[CHART] updateChartLabels called');
+    const localize = (key, search, replace) => this.card.localizationManager.localize(this.card.language, key, search, replace);
+
+    const newLabel = localize('ui.temperature_label');
+    const newYLabel = localize('ui.temperature_label');
+    const newXLabel = localize('ui.time_label');
+
+    console.log(`[CHART] New labels: ${newLabel}, ${newYLabel}, ${newXLabel}`);
+
+    this.chart.data.datasets[0].label = newLabel;
+    this.chart.options.scales.y.title.text = newYLabel;
+    this.chart.options.scales.x.title.text = newXLabel;
+    console.log('[CHART] Calling chart.update()');
+    this.chart.update();
   }
 }

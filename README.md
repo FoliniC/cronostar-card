@@ -12,11 +12,12 @@ A powerful and intuitive Lovelace card for managing temperature schedules in Hom
 
 - 📊 **Visual Schedule Editor** - Interactive Chart.js graph with drag-and-drop temperature control
 - 🎯 **Multi-Point Selection** - Select and modify multiple hours simultaneously (Shift + drag)
-- ⌨️ **Keyboard Controls** - Arrow keys for precise temperature adjustments
+- ⌨️ **Advanced Keyboard Controls** - Precise adjustments with arrow keys, plus Ctrl+A for select all.
+- ⚙️ **Settings Menu** - Access additional options like language selection and help.
+- 🌐 **Internationalization** - Support for multiple languages (English and Italian).
 - 💾 **Profile Management** - Save and load multiple temperature profiles
 - 🔄 **Auto-Save** - Automatically saves changes when switching profiles
 - 📱 **Responsive Design** - Works on desktop, tablet, and mobile
-- 🌐 **Flexible Hour Base** - Supports both 0-based (00-23) and 1-based (01-24) hour schemes
 - 🎨 **Theme Integration** - Respects Home Assistant themes
 
 ## 🚀 Quick Start
@@ -114,7 +115,9 @@ See [examples/full-setup.yaml](examples/full-setup.yaml) for complete configurat
 - **Select Multiple Hours**: Hold Shift + drag to select area
 - **Keyboard Adjustment**: 
   - `↑` / `↓` - Increase/decrease temperature by 0.5°C
-  - `←` / `→` - Align selected points to anchor value
+  - `←` - Sets the temperature of all selected points to be the same as the temperature of the leftmost selected point.
+  - `→` - Sets the temperature of all selected points to be the same as the temperature of the rightmost selected point.
+  - `Ctrl` + `A` - Select all points.
   - `Esc` - Clear selection
 - **Add to Selection**: Ctrl/Cmd + click to toggle points
 
@@ -169,11 +172,12 @@ See [docs/troubleshooting.md](docs/troubleshooting.md) for more solutions.
 
 See [docs/changelog.md](docs/changelog.md) for version history.
 
-### v2.18 (Latest)
-- ✅ Fixed value shift bug during profile loading
-- ✅ Added responsive chart support
-- ✅ Improved async state synchronization
-- ✅ Enhanced logging for debugging
+### v2.20.0 (Latest)
+- ✅ Added settings menu with language selection (EN/IT) and help.
+- ✅ Added Ctrl+A shortcut to select all points.
+- ✅ Changed arrow key behavior to align with leftmost/rightmost selected point.
+- ✅ Upgraded to Lit 3.
+- ✅ Fixed several bugs related to localization and component initialization.
 
 ## 🤝 Contributing
 
@@ -191,7 +195,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 🙏 Credits
 
-- Built with [LitElement](https://lit.dev/)
+- Built with [Lit](https://lit.dev/)
 - Charting by [Chart.js](https://www.chartjs.org/)
 - Drag functionality by [chartjs-plugin-dragdata](https://github.com/chrispahm/chartjs-plugin-dragdata)
 

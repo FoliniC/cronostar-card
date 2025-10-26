@@ -1,3 +1,4 @@
+
 /**
  * Selection management for Temperature Scheduler Card
  * @module selection-manager
@@ -11,6 +12,16 @@ export class SelectionManager {
     this.selectedPoint = null;
     this.selectedPoints = [];
     this.selectionSnapshot = null;
+  }
+
+  /**
+   * Select all points
+   */
+  selectAll() {
+    const allIndices = Array.from({ length: 24 }, (_, i) => i);
+    this.selectIndices(allIndices, false);
+    this.card.chartManager?.updatePointStyling(this.selectedPoint, this.selectedPoints);
+    this.card.chartManager?.update();
   }
 
   /**
