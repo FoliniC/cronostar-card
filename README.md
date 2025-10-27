@@ -1,8 +1,8 @@
 # CronoStar
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/integration)
-[![GitHub Release](https://img.shields.io/github/release/YOUR_USERNAME/cronostar-card.svg)](https://github.com/YOUR_USERNAME/cronostar-card/releases)
-[![License](https://img.shields.io/github/license/YOUR_USERNAME/cronostar-card.svg)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/release/FoliniC/cronostar-card.svg)](https://github.com/FoliniC/cronostar-card/releases)
+[![License](https://img.shields.io/github/license/FoliniC/cronostar-card.svg)](LICENSE)
 
 A powerful and intuitive Lovelace card for managing hourly schedules in Home Assistant with a visual editor, now named CronoStar.
 
@@ -188,8 +188,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 💬 Support
 
-- 🐛 [Report a Bug](https://github.com/YOUR_USERNAME/cronostar-card/issues)
-- 💡 [Request a Feature](https://github.com/YOUR_USERNAME/cronostar-card/issues)
+- 🐛 [Report a Bug](https://github.com/FoliniC/cronostar-card/issues)
+- 💡 [Request a Feature](https://github.com/FoliniC/cronostar-card/issues)
 - 💬 [Community Forum](https://community.home-assistant.io/)
 
 ## 🙏 Credits
