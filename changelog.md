@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.0
+-   **Improvements**:
+    -   Project renamed to CronoStar. The name 'Crono' highlights its scheduling nature, making it clear it's designed for time-based controls, such as thermostats and other daily routines.
+
 ## v2.22.11
 
 -   **Bug Fixes**:

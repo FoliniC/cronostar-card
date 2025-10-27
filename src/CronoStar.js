@@ -14,7 +14,7 @@ import { KeyboardHandler } from './keyboard-handler.js';
 import { PointerHandler } from './pointer-handler.js';
 import { Logger } from './utils.js';
 import { LocalizationManager } from './localization-manager.js';
-export class TemperatureSchedulerCard extends LitElement {
+export class CronoStarCard extends LitElement {
   static get properties() {
     return {
       hass: { type: Object },

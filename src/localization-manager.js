@@ -1,7 +1,7 @@
 
 const translations = {
   en: {
-    "ui.title": "Temperature Schedule",
+    "ui.title": "CronoStar Schedule",
     "ui.loading": "Loading data...",
     "ui.pause": "Pause",
     "ui.profile": "Profile",
@@ -26,11 +26,11 @@ const translations = {
     "preset.generic_kwh": "Generic kWh",
     "preset.generic_temperature": "Generic Temperature",
     "preset.generic_switch": "Generic Switch",
-    "help.title": "Temperature Scheduler Help",
+    "help.title": "CronoStar Help",
     "help.text": "Drag points on the graph to change the temperature. Hold Shift to select multiple points. Use Ctrl+A to select all points.",
   },
   it: {
-    "ui.title": "Programma Temperatura",
+    "ui.title": "Programma CronoStar",
     "ui.loading": "Caricamento dati...",
     "ui.pause": "Pausa",
     "ui.profile": "Profilo",
@@ -55,7 +55,7 @@ const translations = {
     "preset.generic_kwh": "kWh Generico",
     "preset.generic_temperature": "Temperatura Generica",
     "preset.generic_switch": "Interruttore Generico",
-    "help.title": "Aiuto Programma Temperatura",
+    "help.title": "Aiuto CronoStar",
     "help.text": "Trascina i punti sul grafico per cambiare la temperatura. Tieni premuto Shift per selezionare più punti. Usa Ctrl+A per selezionare tutti i punti.",
   },
 };

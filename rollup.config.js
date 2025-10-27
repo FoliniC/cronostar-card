@@ -8,7 +8,7 @@ const production = !process.env.ROLLUP_WATCH;
 export default {
   input: 'src/main.js',
   output: {
-    file: 'dist/temperature-scheduler-card.js',
+    file: 'dist/cronostar-card.js',
     format: 'es',
     sourcemap: !production,
   },

@@ -3,11 +3,11 @@
  * @module config
  */
 
-export const VERSION = '2.22.11';
+export const VERSION = '2.3.0';
 
 export const PRESETS = {
   thermostat: {
-    title: "Temperature Scheduler",
+    title: "CronoStar",
     entity_prefix: "temperature_hour_",
     y_axis_label: "Temperature",
     unit_of_measurement: '°C',
@@ -20,7 +20,7 @@ export const PRESETS = {
     load_script: "script.load_temperature_profile",
   },
   ev_charging: {
-    title: "EV Charging Scheduler",
+    title: "CronoStar EV Charging",
     entity_prefix: "ev_charge_hour_",
     y_axis_label: "Power",
     unit_of_measurement: 'kW',
@@ -34,7 +34,7 @@ export const PRESETS = {
     load_script: null,
   },
   generic_kwh: { // New preset for generic kWh scheduling
-    title: "Generic kWh Scheduler",
+    title: "CronoStar Generic kWh",
     entity_prefix: "generic_kwh_hour_", // A generic prefix
     y_axis_label: "Energy",
     unit_of_measurement: 'kWh',
@@ -47,7 +47,7 @@ export const PRESETS = {
     load_script: null,
   },
   generic_temperature: {
-    title: "Generic Temperature Scheduler",
+    title: "CronoStar Generic Temperature",
     entity_prefix: "generic_temp_hour_",
     y_axis_label: "Temperature",
     unit_of_measurement: '°C',
@@ -60,7 +60,7 @@ export const PRESETS = {
     load_script: null,
   },
   generic_switch: {
-    title: "Generic Switch Scheduler",
+    title: "CronoStar Generic Switch",
     entity_prefix: "generic_switch_hour_",
     y_axis_label: "State",
     unit_of_measurement: '', // No unit for switch state

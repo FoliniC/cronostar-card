@@ -1,9 +1,9 @@
 {
-  "name": "temperature-scheduler-card",
-  "version": "2.22.11",
+  "name": "cronostar-card",
+  "version": "2.3.0",
   "type": "module",
-  "description": "A powerful temperature scheduler card for Home Assistant with visual hourly control",
-  "main": "dist/temperature-scheduler-card.js",
+  "description": "A powerful hourly scheduler card for Home Assistant with visual control, now named CronoStar.",
+  "main": "dist/cronostar-card.js",
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/temperature-scheduler-card.git"
+    "url": "https://github.com/YOUR_USERNAME/cronostar-card.git"
   },
   "keywords": [
     "home-assistant",
@@ -27,9 +27,9 @@
   "author": "Your Name",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/temperature-scheduler-card/issues"
+    "url": "https://github.com/YOUR_USERNAME/cronostar-card/issues"
   },
-  "homepage": "https://github.com/YOUR_USERNAME/temperature-scheduler-card#readme",
+  "homepage": "https://github.com/YOUR_USERNAME/cronostar-card#readme",
   "devDependencies": {
     "@babel/core": "^7.24.7",
     "@babel/preset-env": "^7.24.7",

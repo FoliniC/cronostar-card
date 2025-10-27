@@ -4,25 +4,25 @@
  * @module main
  */
 
-import { TemperatureSchedulerCard } from './temperature-scheduler-card.js';
+import { CronoStarCard } from './CronoStar.js';
 import { VERSION } from './config.js';
 
 // Register custom element
-customElements.define('temperature-scheduler-card', TemperatureSchedulerCard);
+customElements.define('cronostar-card', CronoStarCard);
 
 // Add card to custom card picker
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: 'temperature-scheduler-card',
-  name: 'Temperature Scheduler Card',
-  description: 'Visual temperature schedule editor with drag-and-drop control',
+  type: 'cronostar-card',
+  name: 'CronoStar',
+  description: 'Visual hourly schedule editor with drag-and-drop control',
   preview: true,
-  documentationURL: 'https://github.com/YOUR_USERNAME/temperature-scheduler-card',
+  documentationURL: 'https://github.com/YOUR_USERNAME/cronostar-card',
 });
 
 Logger.log(
   'MAIN',
-  `%c TEMPERATURE-SCHEDULER-CARD %c v${VERSION} `,
+  `%c CRONOSTAR %c v${VERSION} `,
   'color: white; background: #03a9f4; font-weight: 700;',
   'color: #03a9f4; background: white; font-weight: 700;'
 );

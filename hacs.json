@@ -1,7 +1,7 @@
 {
-  "name": "Temperature Scheduler Card",
+  "name": "CronoStar",
   "render_readme": true,
-  "filename": "temperature-scheduler-card.js",
+  "filename": "cronostar-card.js",
   "content_in_root": false,
   "zip_release": false,
   "homeassistant": "2024.1.0"

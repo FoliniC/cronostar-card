@@ -1,12 +1,12 @@
-# Scheduler Card
+# CronoStar
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/integration)
-[![GitHub Release](https://img.shields.io/github/release/YOUR_USERNAME/temperature-scheduler-card.svg)](https://github.com/YOUR_USERNAME/temperature-scheduler-card/releases)
-[![License](https://img.shields.io/github/license/YOUR_USERNAME/temperature-scheduler-card.svg)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/release/YOUR_USERNAME/cronostar-card.svg)](https://github.com/YOUR_USERNAME/cronostar-card/releases)
+[![License](https://img.shields.io/github/license/YOUR_USERNAME/cronostar-card.svg)](LICENSE)
 
-A powerful and intuitive Lovelace card for managing hourly schedules in Home Assistant with a visual editor.
+A powerful and intuitive Lovelace card for managing hourly schedules in Home Assistant with a visual editor, now named CronoStar.
 
-![Scheduler Card](docs/images/screenshot.png)
+![CronoStar](docs/images/screenshot.png)
 
 ## ✨ Features
 
@@ -34,12 +34,12 @@ Installation is best done via HACS. If you do not have HACS, please install it f
 
 ### Manual Installation
 
-1.  Download `temperature-scheduler-card.js` from the [latest release](https://github.com/YOUR_USERNAME/temperature-scheduler-card/releases).
+1.  Download `cronostar-card.js` from the [latest release](https://github.com/YOUR_USERNAME/cronostar-card/releases).
 2.  Copy it to your `/config/www/` directory.
 3.  Add it as a resource in Lovelace:
     ```yaml
     resources:
-      - url: /local/temperature-scheduler-card.js
+      - url: /local/cronostar-card.js
         type: module
     ```
 
@@ -113,7 +113,10 @@ step_value: 5
 
 See [changelog.md](changelog.md) for version history.
 
-### v2.22.11 (Latest)
+## v2.3.0 (Latest)
+- ✅ Improved: Project renamed to CronoStar. The name 'Crono' highlights its scheduling nature, making it clear it's designed for time-based controls, such as thermostats and other daily routines.
+
+### v2.22.11 
 - ✅ Fixed: Logging visibility issue resolved; `Logger.warn` now respects `logging_enabled` setting.
 - ✅ Fixed: Interface no longer unresponsive when 'Anomalous operation' message is displayed (pointer events are now ignored by the overlay).
 - ✅ Improved: Missing entities warning is now logged only once per change in missing entities list.
@@ -185,8 +188,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 💬 Support
 
-- 🐛 [Report a Bug](https://github.com/YOUR_USERNAME/temperature-scheduler-card/issues)
-- 💡 [Request a Feature](https://github.com/YOUR_USERNAME/temperature-scheduler-card/issues)
+- 🐛 [Report a Bug](https://github.com/YOUR_USERNAME/cronostar-card/issues)
+- 💡 [Request a Feature](https://github.com/YOUR_USERNAME/cronostar-card/issues)
 - 💬 [Community Forum](https://community.home-assistant.io/)
 
 ## 🙏 Credits
