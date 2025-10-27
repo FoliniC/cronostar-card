@@ -1,178 +1,174 @@
-# Temperature Scheduler Card
+# Scheduler Card
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/integration)
 [![GitHub Release](https://img.shields.io/github/release/YOUR_USERNAME/temperature-scheduler-card.svg)](https://github.com/YOUR_USERNAME/temperature-scheduler-card/releases)
 [![License](https://img.shields.io/github/license/YOUR_USERNAME/temperature-scheduler-card.svg)](LICENSE)
 
-A powerful and intuitive Lovelace card for managing temperature schedules in Home Assistant with visual hourly control.
+A powerful and intuitive Lovelace card for managing hourly schedules in Home Assistant with a visual editor.
 
-![Temperature Scheduler Card](docs/images/screenshot.png)
+![Scheduler Card](docs/images/screenshot.png)
 
 ## ✨ Features
 
-- 📊 **Visual Schedule Editor** - Interactive Chart.js graph with drag-and-drop temperature control
-- 🎯 **Multi-Point Selection** - Select and modify multiple hours simultaneously (Shift + drag)
+- ✅ **Generic Scheduler** - Configure for any hourly value: temperature, power, etc.
+- 📊 **Visual Schedule Editor** - Interactive Chart.js graph with drag-and-drop control.
+- 🎯 **Multi-Point Selection** - Select and modify multiple hours simultaneously (Shift + drag).
 - ⌨️ **Advanced Keyboard Controls** - Precise adjustments with arrow keys, plus Ctrl+A for select all.
 - ⚙️ **Settings Menu** - Access additional options like language selection and help.
 - 🌐 **Internationalization** - Support for multiple languages (English and Italian).
-- 💾 **Profile Management** - Save and load multiple temperature profiles
-- 🔄 **Auto-Save** - Automatically saves changes when switching profiles
-- 📱 **Responsive Design** - Works on desktop, tablet, and mobile
-- 🎨 **Theme Integration** - Respects Home Assistant themes
+- 💾 **Profile Management** - Save and load multiple schedule profiles.
+- 🔄 **Auto-Save** - Automatically saves changes when switching profiles.
+- 📱 **Responsive Design** - Works on desktop, tablet, and mobile.
+- 🎨 **Theme Integration** - Respects Home Assistant themes.
 
 ## 🚀 Quick Start
 
-### Installation via HACS (Recommended)
+### Installation
 
-1. Open HACS in Home Assistant
-2. Click on "Frontend"
-3. Click the "+" button
-4. Search for "Temperature Scheduler Card"
-5. Click "Install"
-6. Restart Home Assistant
+Installation is best done via HACS. If you do not have HACS, please install it first.
+
+1.  Open HACS in Home Assistant.
+2.  Go to "Frontend" -> Click the "+" button.
+3.  Search for "Scheduler Card" and install it.
+4.  Restart Home Assistant.
 
 ### Manual Installation
 
-1. Download `temperature-scheduler-card.js` from the [latest release](https://github.com/YOUR_USERNAME/temperature-scheduler-card/releases)
-2. Copy to `/config/www/temperature-scheduler-card.js`
-3. Add resource to Lovelace:
-   ```yaml
-   resources:
-     - url: /local/temperature-scheduler-card.js
-       type: module
-   ```
+1.  Download `temperature-scheduler-card.js` from the [latest release](https://github.com/YOUR_USERNAME/temperature-scheduler-card/releases).
+2.  Copy it to your `/config/www/` directory.
+3.  Add it as a resource in Lovelace:
+    ```yaml
+    resources:
+      - url: /local/temperature-scheduler-card.js
+        type: module
+    ```
 
 ## 📖 Configuration
 
-### Minimal Configuration
+The card now includes presets to simplify configuration for common use cases. You can select a preset and override any specific option.
+
+### Using Presets
+
+The `preset` option allows you to quickly configure the card. Available presets are `thermostat` (default) and `ev_charging`.
+
+**Example: Thermostat (Default Preset)**
+
+This is the simplest configuration. It uses the `thermostat` preset by default.
 
 ```yaml
 type: custom:temperature-scheduler-card
-title: Temperature Schedule
-entity_prefix: temperature_hour_
+entity_prefix: temperature_hour_ # Make sure this matches your input_numbers
 ```
 
-### Full Configuration
+**Example: EV Charging**
+
+To configure the card for EV charging, set the `preset` to `ev_charging`. You can then override any setting from the preset, like the `title`.
 
 ```yaml
 type: custom:temperature-scheduler-card
-title: Temperature Schedule
-entity_prefix: temperature_hour_
-pause_entity: input_boolean.temperature_schedule_paused
-profiles_select_entity: input_select.temperature_profiles
-save_script: script.save_temperature_profile
-load_script: script.load_temperature_profile
-hour_base: auto  # 'auto' | 0 | 1
-chartjs_path: /local/chart.min.js
-dragdata_path: /local/chartjs-plugin-dragdata.min.js
+preset: ev_charging
+title: My EV Charging Schedule
+entity_prefix: ev_charge_hour_ # Make sure this matches your input_numbers
 ```
 
-### Required Entities
+### Custom Configuration
 
-You need to create:
+You can also define everything manually without using a preset by setting the options yourself.
 
-**24 Input Numbers** (for each hour):
 ```yaml
-input_number:
-  temperature_hour_00:
-    name: "Temperature 00:00"
-    min: 15
-    max: 30
-    step: 0.5
-    unit_of_measurement: "°C"
-  # ... repeat for 01 to 23
+type: custom:temperature-scheduler-card
+title: Custom Scheduler
+entity_prefix: my_custom_hour_
+y_axis_label: "My Value"
+unit_of_measurement: "%"
+min_value: 0
+max_value: 100
+step_value: 5
 ```
-
-**Input Select** (for profiles):
-```yaml
-input_select:
-  temperature_profiles:
-    name: "Temperature Profiles"
-    options:
-      - Eco
-      - Comfort
-      - Away
-```
-
-**Input Text** (for profile storage):
-```yaml
-input_text:
-  temperature_profile_eco:
-    name: "Profile Eco (JSON)"
-    max: 255
-  temperature_profile_comfort:
-    name: "Profile Comfort (JSON)"
-    max: 255
-```
-
-See [examples/full-setup.yaml](examples/full-setup.yaml) for complete configuration.
-
-## 🎮 Usage
-
-### Basic Operations
-
-- **Modify Single Hour**: Click and drag a point up/down
-- **Select Multiple Hours**: Hold Shift + drag to select area
-- **Keyboard Adjustment**: 
-  - `↑` / `↓` - Increase/decrease temperature by 0.5°C
-  - `←` - Sets the temperature of all selected points to be the same as the temperature of the leftmost selected point.
-  - `→` - Sets the temperature of all selected points to be the same as the temperature of the rightmost selected point.
-  - `Ctrl` + `A` - Select all points.
-  - `Esc` - Clear selection
-- **Add to Selection**: Ctrl/Cmd + click to toggle points
-
-### Profile Management
-
-1. Modify temperatures on the graph
-2. Select a different profile → changes are auto-saved to previous profile
-3. Click "Reset Changes" to reload current profile
-
-## 🛠️ Scripts Setup
-
-Copy the scripts from [scripts/temperature_profiles.yaml](scripts/temperature_profiles.yaml) to your Home Assistant configuration.
-
-The scripts handle:
-- ✅ Saving profiles to `input_text` entities (JSON format)
-- ✅ Loading profiles and applying to hourly `input_number` entities
-- ✅ Support for both 0-based and 1-based hour schemes
-- ✅ Detailed logging for debugging
 
 ## 📊 Options Reference
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `type` | string | **required** | `custom:temperature-scheduler-card` |
-| `title` | string | "Temperature Scheduler" | Card title |
-| `entity_prefix` | string | **required** | Prefix for hourly entities (e.g., `temperature_hour_`) |
-| `pause_entity` | string | - | Entity to pause/resume schedule |
-| `profiles_select_entity` | string | - | Entity for profile selection |
-| `save_script` | string | `script.save_temperature_profile` | Script to save profiles |
-| `load_script` | string | `script.load_temperature_profile` | Script to load profiles |
-| `hour_base` | number/string | `auto` | Hour numbering: `0` (00-23), `1` (01-24), or `auto` |
-| `chartjs_path` | string | `/local/chart.min.js` | Path to Chart.js library |
-| `dragdata_path` | string | `/local/chartjs-plugin-dragdata.min.js` | Path to drag plugin |
+| `preset` | string | `thermostat` | Use a pre-defined configuration (`thermostat` or `ev_charging`). Options can be overridden. Can also be changed from the card's menu. |
+| `entity_prefix` | string | **required** | Prefix for your 24 hourly `input_number` entities. |
+| `title` | string | (from preset) | The card title. |
+| `y_axis_label` | string | (from preset) | Custom label for the Y-axis. |
+| `unit_of_measurement` | string | (from preset) | Unit of measurement to display. |
+| `min_value` | number | (from preset) | Minimum value for the Y-axis. |
+| `max_value` | number | (from preset) | Maximum value for the Y-axis. |
+| `step_value` | number | (from preset) | Step for value adjustments. |
+| `pause_entity` | string | - | `input_boolean` entity to pause/resume the schedule. |
+| `profiles_select_entity` | string | - | `input_select` entity for profile selection. |
+| `save_script` | string | `script.save_temperature_profile` | Script to save profiles. |
+| `load_script` | string | `script.load_temperature_profile` | Script to load profiles. |
+| `hour_base` | number/string | `auto` | Hour numbering: `0` (00-23) or `1` (01-24). |
+| `logging_enabled` | boolean | `false` | Enable/disable detailed logging in the browser console. Can also be toggled from the card's menu. |
+| `chartjs_path` | string | `/local/chart.min.js` | Path to Chart.js library. |
+| `dragdata_path` | string | `/local/chartjs-plugin-dragdata.min.js` | Path to the Chart.js drag data plugin. |
 
-## 🐛 Troubleshooting
-
-### Values are shifted after loading profile
-
-**Solution**: Update to v2.18+ which fixes the indexing bug in load script.
-
-### Graph doesn't resize
-
-**Solution**: Make sure you're using v2.18+ with `responsive: true` enabled.
-
-### Changes not saving
-
-**Solution**: Check that `input_text` entities have `max: 255` and scripts are properly configured.
-
-See [docs/troubleshooting.md](docs/troubleshooting.md) for more solutions.
 
 ## 📝 Changelog
 
-See [docs/changelog.md](docs/changelog.md) for version history.
+See [changelog.md](changelog.md) for version history.
 
-### v2.20.0 (Latest)
+### v2.22.11 (Latest)
+- ✅ Fixed: Logging visibility issue resolved; `Logger.warn` now respects `logging_enabled` setting.
+- ✅ Fixed: Interface no longer unresponsive when 'Anomalous operation' message is displayed (pointer events are now ignored by the overlay).
+- ✅ Improved: Missing entities warning is now logged only once per change in missing entities list.
+- ✅ Improved: Watermark styling further refined to be less intrusive.
+- ✅ Version patch incremented.
+
+### v2.22.9
+- ✅ Fixed: Logging visibility issue resolved by replacing direct `console.log` calls with `Logger.log`.
+- ✅ Improved: Watermark styling refined to be less intrusive (transparent background, lighter color, dynamic text).
+- ✅ Improved: Default configuration now uses a `generic_kwh` preset (0-7 kWh) if no preset is specified.
+- ✅ Version patch incremented.
+
+### v2.22.8
+- ✅ Fixed: `TIMEOUTS` ReferenceError resolved by importing `TIMEOUTS` in `temperature-scheduler-card.js`.
+- ✅ Improved: Watermark styling refined to be less intrusive (lighter color, no background).
+- ✅ Improved: Missing entities are now logged as a single, grouped message in the console.
+- ✅ Version patch incremented.
+
+### v2.22.7
+- ✅ Fixed: When `input_number` entities are missing, the card now uses default values and displays a clear warning message and a watermark on the chart.
+- ✅ Version patch incremented.
+
+### v2.22.6
+- ✅ Fixed: When loading presets with missing `input_number` entities, a clear message is now displayed listing the required entities.
+- ✅ Version patch incremented.
+
+### v2.22.5
+- ✅ Fixed: Logging is now correctly disabled at startup when `logging_enabled` is `false`.
+- ✅ Version patch incremented.
+
+### v2.22.4
+- ✅ Fixed: Logging toggle and preset selection now work correctly and close the menu.
+- ✅ Improved: Added warning logs when `input_number` entities are not found for a preset.
+- ✅ Version patch incremented.
+
+### v2.22.3
+- ✅ Fixed: Logging toggle and preset selection now work correctly and close the menu.
+- ✅ Version patch incremented.
+
+### v2.22.2
+- ✅ Added UI controls in the card's menu for `logging_enabled` and `preset` selection.
+- ✅ Fixed: Menu now closes after selecting logging or preset options.
+- ✅ Version patch incremented.
+
+### v2.22.0
+- ✅ Added `preset` option for quick configuration (`thermostat`, `ev_charging`).
+- ✅ Added `logging_enabled` option to control console output.
+- ✅ Versioning scheme updated to increment minor version for new features.
+
+### v2.21.0
+- ✅ Made the card generic for any scheduled value (e.g., EV charging power).
+- ✅ Added `y_axis_label`, `unit_of_measurement`, `min_value`, `max_value`, and `step_value` options.
+- ✅ Updated documentation with new options and examples.
+
+### v2.20.0
 - ✅ Added settings menu with language selection (EN/IT) and help.
 - ✅ Added Ctrl+A shortcut to select all points.
 - ✅ Changed arrow key behavior to align with leftmost/rightmost selected point.

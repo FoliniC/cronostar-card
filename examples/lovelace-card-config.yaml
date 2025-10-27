@@ -82,3 +82,19 @@ views:
         entities:
           - input_boolean.temperature_schedule_paused
           - input_select.temperature_profiles
+
+# ============================================================================
+# EV Charging Example
+# ============================================================================
+# This example shows how to use the card to schedule EV charging power.
+# You will need to create corresponding `input_number` entities
+# (e.g., `input_number.ev_charging_power_00`, etc.).
+
+- type: custom:temperature-scheduler-card
+  title: EV Charging Schedule
+  entity_prefix: ev_charging_power_
+  y_axis_label: "Power"
+  unit_of_measurement: "kW"
+  min_value: 0
+  max_value: 11
+  step_value: 0.5

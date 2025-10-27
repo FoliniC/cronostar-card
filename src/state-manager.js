@@ -11,6 +11,8 @@ export class StateManager {
     this.scheduleData = new Array(24).fill(null);
     this.dirtyIndices = new Set();
     this.isLoadingProfile = false;
+    this.missingEntities = []; // New property
+    this.missingEntitiesLogged = false; // New flag
   }
 
   /**
@@ -21,16 +23,36 @@ export class StateManager {
   updateFromHass(hass) {
     const newData = [];
     let dataChanged = false;
+    const currentMissingEntities = []; // Collect missing entities for this update cycle
 
     for (let hour = 0; hour < 24; hour++) {
       const entityId = this.getEntityIdForHour(hour);
       const stateObj = hass.states[entityId];
-      let newValue = stateObj ? safeParseFloat(stateObj.state) : null;
+      let newValue = null;
+      if (stateObj) {
+        newValue = safeParseFloat(stateObj.state);
+      } else {
+        currentMissingEntities.push(entityId); // Add to current missing entities
+        newValue = this.scheduleData[hour] !== null ? this.scheduleData[hour] : this.card.config.min_value;
+      }
       
       if (this.scheduleData[hour] !== newValue) {
         dataChanged = true;
       }
       newData[hour] = newValue;
+    }
+
+    // Check if the list of missing entities has changed
+    const missingEntitiesChanged = JSON.stringify(this.missingEntities) !== JSON.stringify(currentMissingEntities);
+
+    this.missingEntities = currentMissingEntities; // Update the stored list
+
+    if (this.missingEntities.length > 0 && (!this.missingEntitiesLogged || missingEntitiesChanged)) {
+      const groupedEntities = this.groupMissingEntities(this.missingEntities);
+      Logger.warn('STATE', `Missing ${this.missingEntities.length} entities. Using default values. Please create the following input_number entities:\n\n${groupedEntities}`);
+      this.missingEntitiesLogged = true; // Mark as logged
+    } else if (this.missingEntities.length === 0) {
+      this.missingEntitiesLogged = false; // Reset if no missing entities
     }
 
     if (dataChanged && !this.isLoadingProfile) {
@@ -157,6 +179,45 @@ export class StateManager {
       const value = this.scheduleData[hour];
       Logger.memo(`${context} -> hour=${label}, entity=${entityId}, value=${value}`);
     });
+  }
+
+  /**
+   * Generates YAML definitions for missing input_number entities.
+   * @param {Array<string>} entities - List of missing entity IDs
+   * @returns {string} Concatenated YAML definitions for the missing entities.
+   */
+  groupMissingEntities(entities) {
+    const yamlDefinitions = [];
+    const yAxisLabel = this.card.config.y_axis_label || 'Value'; // Fallback label
+    const unitOfMeasurement = this.card.config.unit_of_measurement || '';
+
+    entities.forEach(entityId => {
+      const match = entityId.match(/^(input_number\.(.+?))_(\d{1,2})$/);
+      if (match) {
+        const fullPrefix = match[1]; // e.g., input_number.temperature_hour
+        const prefixName = match[2]; // e.g., temperature_hour
+        const hour = parseInt(match[3], 10);
+        const formattedHour = hour.toString().padStart(2, '0');
+        const entityName = `${prefixName}_${formattedHour}`; // e.g., temperature_hour_00
+
+        // Use actual newlines in the string literal
+        const yaml = `
+${entityName}:
+  name: ${yAxisLabel} at ${formattedHour}
+  min: ${this.card.config.min_value}
+  max: ${this.card.config.max_value}
+  step: ${this.card.config.step_value}
+  initial: ${this.card.config.min_value}
+  unit_of_measurement: "${unitOfMeasurement}"
+`;
+        yamlDefinitions.push(yaml);
+      } else {
+        // For entities that don't match the expected pattern, just list them
+        yamlDefinitions.push(`- ${entityId} (unrecognized format)`);
+      }
+    });
+    // Join all YAML definitions into a single string, separated by two newlines for readability
+    return yamlDefinitions.join('\n\n');
   }
 
   /**

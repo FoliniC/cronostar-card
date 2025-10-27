@@ -3,18 +3,90 @@
  * @module config
  */
 
-export const VERSION = '2.20.0';
+export const VERSION = '2.22.11';
+
+export const PRESETS = {
+  thermostat: {
+    title: "Temperature Scheduler",
+    entity_prefix: "temperature_hour_",
+    y_axis_label: "Temperature",
+    unit_of_measurement: '°C',
+    min_value: 15,
+    max_value: 30,
+    step_value: 0.5,
+    pause_entity: "input_boolean.temperature_schedule_paused",
+    profiles_select_entity: "input_select.temperature_profiles",
+    save_script: "script.save_temperature_profile",
+    load_script: "script.load_temperature_profile",
+  },
+  ev_charging: {
+    title: "EV Charging Scheduler",
+    entity_prefix: "ev_charge_hour_",
+    y_axis_label: "Power",
+    unit_of_measurement: 'kW',
+    min_value: 0,
+    max_value: 11,
+    step_value: 0.5,
+    // These entities would need to be defined by the user for EV charging
+    pause_entity: null,
+    profiles_select_entity: null,
+    save_script: null,
+    load_script: null,
+  },
+  generic_kwh: { // New preset for generic kWh scheduling
+    title: "Generic kWh Scheduler",
+    entity_prefix: "generic_kwh_hour_", // A generic prefix
+    y_axis_label: "Energy",
+    unit_of_measurement: 'kWh',
+    min_value: 0,
+    max_value: 7,
+    step_value: 0.5,
+    pause_entity: null,
+    profiles_select_entity: null,
+    save_script: null,
+    load_script: null,
+  },
+  generic_temperature: {
+    title: "Generic Temperature Scheduler",
+    entity_prefix: "generic_temp_hour_",
+    y_axis_label: "Temperature",
+    unit_of_measurement: '°C',
+    min_value: 0,
+    max_value: 40,
+    step_value: 0.5,
+    pause_entity: null,
+    profiles_select_entity: null,
+    save_script: null,
+    load_script: null,
+  },
+  generic_switch: {
+    title: "Generic Switch Scheduler",
+    entity_prefix: "generic_switch_hour_",
+    y_axis_label: "State",
+    unit_of_measurement: '', // No unit for switch state
+    min_value: 0, // 0 for Off
+    max_value: 1, // 1 for On
+    step_value: 1, // Only allow integer steps (0 or 1)
+    pause_entity: null,
+    profiles_select_entity: null,
+    save_script: null,
+    load_script: null,
+    // Custom property to indicate this is a switch type, for Y-axis formatting
+    is_switch_preset: true,
+  }
+};
 
 export const DEFAULT_CONFIG = {
-  title: "Temperature Scheduler",
-  entity_prefix: "temperature_hour_",
+  preset: 'thermostat', // Default to thermostat preset
   chartjs_path: "/local/chart.min.js",
   dragdata_path: "/local/chartjs-plugin-dragdata.min.js",
-  pause_entity: "input_boolean.temperature_schedule_paused",
-  profiles_select_entity: "input_select.temperature_profiles",
-  save_script: "script.save_temperature_profile",
-  load_script: "script.load_temperature_profile",
   hour_base: "auto", // 'auto' | 0 | 1
+  logging_enabled: false,
+  // These are now part of presets or can be overridden
+  pause_entity: null,
+  profiles_select_entity: null,
+  save_script: null,
+  load_script: null,
 };
 
 export const CHART_DEFAULTS = {
@@ -30,15 +102,6 @@ export const CHART_DEFAULTS = {
   tension: 0.4,
 };
 
-export const COLORS = {
-  primary: "rgba(3, 169, 244, 1)",
-  primaryLight: "rgba(3, 169, 244, 0.2)",
-  selected: "red",
-  selectedDark: "darkred",
-  anchor: "#ff5252",
-  anchorDark: "#b71c1c",
-};
-
 export const TIMEOUTS = {
   entityStateWait: 3000,
   entityNumericStateWait: 4000,
@@ -48,6 +111,15 @@ export const TIMEOUTS = {
   menuSuppression: 1000,
 };
 
+export const COLORS = {
+  primary: "rgba(3, 169, 244, 1)",
+  primaryLight: "rgba(3, 169, 244, 0.2)",
+  selected: "red",
+  selectedDark: "darkred",
+  anchor: "#ff5252",
+  anchorDark: "#b71c1c",
+};
+
 /**
  * Validate and normalize configuration
  * @param {Object} config - User configuration
@@ -55,19 +127,23 @@ export const TIMEOUTS = {
  * @throws {Error} If configuration is invalid
  */
 export function validateConfig(config) {
-  if (!config.entity_prefix) {
-    throw new Error("Configuration error: entity_prefix is required");
-  }
+  const presetName = config.preset || DEFAULT_CONFIG.preset;
+  const presetConfig = PRESETS[presetName] || PRESETS.thermostat; // Fallback to thermostat preset
 
-  const validated = {
+  const mergedConfig = {
     ...DEFAULT_CONFIG,
+    ...presetConfig,
     ...config,
   };
 
-  // Normalize hour_base
-  validated.hour_base = normalizeHourBase(config.hour_base);
+  if (!mergedConfig.entity_prefix) {
+    throw new Error("Configuration error: entity_prefix is required");
+  }
 
-  return validated;
+  // Normalize hour_base
+  mergedConfig.hour_base = normalizeHourBase(mergedConfig.hour_base);
+
+  return mergedConfig;
 }
 
 /**

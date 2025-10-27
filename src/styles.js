@@ -117,37 +117,131 @@ export const cardStyles = css`
 
 
 
-  .menu-content {
-
-    position: absolute;
-
-    top: 48px;
-
-    right: 8px;
-
-    background: var(--card-background-color, white);
-
-    border: 1px solid var(--divider-color, #e0e0e0);
-
-    border-radius: 4px;
-
-    z-index: 100;
-
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-
-  }
+    .menu-content {
 
 
 
-  .language-menu {
+      position: absolute;
 
-    display: flex;
 
-    align-items: center;
 
-    padding: 0 8px;
+      top: 48px;
 
-  }
+
+
+      right: 8px;
+
+
+
+      background: var(--card-background-color, white);
+
+
+
+      border: 1px solid var(--divider-color, #e0e0e0);
+
+
+
+      border-radius: 4px;
+
+
+
+      z-index: 100;
+
+
+
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+
+
+
+      padding: 8px 0; /* Add padding for better spacing */
+
+
+
+    }
+
+
+
+  
+
+
+
+    .menu-item-with-switch,
+
+
+
+    .menu-item-with-select {
+
+
+
+      display: flex;
+
+
+
+      justify-content: space-between;
+
+
+
+      align-items: center;
+
+
+
+      padding: 8px 16px;
+
+
+
+      min-height: 48px; /* Ensure consistent height */
+
+
+
+    }
+
+
+
+  
+
+
+
+    .menu-item-with-switch span,
+
+
+
+    .menu-item-with-select span {
+
+
+
+      flex-grow: 1;
+
+
+
+      color: var(--primary-text-color);
+
+
+
+    }
+
+
+
+  
+
+
+
+    .language-menu {
+
+
+
+      display: flex;
+
+
+
+      align-items: center;
+
+
+
+      padding: 0 8px;
+
+
+
+    }
 
 
 
@@ -211,23 +305,215 @@ export const cardStyles = css`
 
   
 
-  .selection-rect {
+    .selection-rect {
 
-    position: absolute;
+  
 
-    border: 2px dashed var(--primary-color, #03a9f4);
+      position: absolute;
 
-    background: rgba(3, 169, 244, 0.15);
+  
 
-    display: none;
+      border: 2px dashed var(--primary-color, #03a9f4);
 
-    pointer-events: none;
+  
 
-    z-index: 20;
+      background: rgba(3, 169, 244, 0.15);
 
-    border-radius: 4px;
+  
 
-  }
+      display: none;
+
+  
+
+      pointer-events: none;
+
+  
+
+      z-index: 20;
+
+  
+
+      border-radius: 4px;
+
+  
+
+    }
+
+  
+
+  
+
+  
+
+          .anomalous-operation-overlay {
+
+  
+
+  
+
+  
+
+            background: transparent; /* No background */
+
+  
+
+  
+
+  
+
+            color: var(--primary-text-color); /* Use primary text color */
+
+  
+
+  
+
+  
+
+            font-weight: bold;
+
+  
+
+  
+
+  
+
+            text-align: center;
+
+  
+
+  
+
+  
+
+            padding: 20px;
+
+  
+
+  
+
+  
+
+            pointer-events: none; /* Allow interaction with elements beneath */
+
+  
+
+  
+
+  
+
+          }
+
+  
+
+  
+
+  
+
+      
+
+  
+
+  
+
+  
+
+        .anomalous-watermark {
+
+  
+
+  
+
+  
+
+          position: absolute;
+
+  
+
+  
+
+  
+
+          top: 50%;
+
+  
+
+  
+
+  
+
+          left: 50%;
+
+  
+
+  
+
+  
+
+          transform: translate(-50%, -50%) rotate(-45deg);
+
+  
+
+  
+
+  
+
+          font-size: 2em; /* Slightly smaller for less intrusiveness */
+
+  
+
+  
+
+  
+
+          color: rgba(128, 128, 128, 0.1); /* Very light gray, very transparent */
+
+  
+
+  
+
+  
+
+          pointer-events: none;
+
+  
+
+  
+
+  
+
+          user-select: none;
+
+  
+
+  
+
+  
+
+          z-index: 1;
+
+  
+
+  
+
+  
+
+          white-space: nowrap;
+
+  
+
+  
+
+  
+
+          text-shadow: none; /* No shadow */
+
+  
+
+  
+
+  
+
+        }
 
   
 

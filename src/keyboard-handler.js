@@ -154,7 +154,7 @@ export class KeyboardHandler {
   handleArrowUpDown(e, indices) {
     e.preventDefault();
 
-    const delta = e.key === "ArrowUp" ? CHART_DEFAULTS.temperatureStep : -CHART_DEFAULTS.temperatureStep;
+    const delta = e.key === "ArrowUp" ? this.card.config.step_value : -this.card.config.step_value;
     const selMgr = this.card.selectionManager;
     const stateMgr = this.card.stateManager;
     const chartMgr = this.card.chartManager;
@@ -165,7 +165,7 @@ export class KeyboardHandler {
 
     indices.forEach(i => {
       let val = (dataset.data[i] ?? stateMgr.scheduleData[i]) + delta;
-      val = clamp(val, CHART_DEFAULTS.minTemperature, CHART_DEFAULTS.maxTemperature);
+      val = clamp(val, this.card.config.min_value, this.card.config.max_value);
       val = roundTo(val, 1);
       dataset.data[i] = val;
       newData[i] = val;

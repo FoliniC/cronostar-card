@@ -1,3 +1,4 @@
+
 /**
  * Temperature Scheduler Card - Entry Point
  * @module main
@@ -19,7 +20,8 @@ window.customCards.push({
   documentationURL: 'https://github.com/YOUR_USERNAME/temperature-scheduler-card',
 });
 
-console.info(
+Logger.log(
+  'MAIN',
   `%c TEMPERATURE-SCHEDULER-CARD %c v${VERSION} `,
   'color: white; background: #03a9f4; font-weight: 700;',
   'color: #03a9f4; background: white; font-weight: 700;'

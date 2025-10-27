@@ -110,9 +110,23 @@ export function isDefined(value) {
 /**
  * Logging utility with tags
  */
+let loggingEnabled = false;
+
 export const Logger = {
-  log: (tag, ...args) => console.log(`[${tag}]`, ...args),
-  warn: (tag, ...args) => console.warn(`[${tag}]`, ...args),
+  setEnabled: (enabled) => {
+    loggingEnabled = !!enabled;
+    console.log('Logger.setEnabled called, loggingEnabled is now', loggingEnabled);
+  },
+  log: (tag, ...args) => {
+    if (loggingEnabled) {
+      console.log(`[${tag}]`, ...args);
+    }
+  },
+  warn: (tag, ...args) => {
+    if (loggingEnabled) {
+      console.warn(`[${tag}]`, ...args);
+    }
+  },
   error: (tag, ...args) => console.error(`[${tag}]`, ...args),
   
   state: (...args) => Logger.log('STATE', ...args),
@@ -124,3 +138,5 @@ export const Logger = {
   key: (...args) => Logger.log('KEY', ...args),
   base: (...args) => Logger.log('BASE', ...args),
 };
+
+window.Logger = Logger;

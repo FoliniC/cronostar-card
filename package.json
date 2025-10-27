@@ -1,6 +1,6 @@
 {
   "name": "temperature-scheduler-card",
-  "version": "2.20.0",
+  "version": "2.22.11",
   "type": "module",
   "description": "A powerful temperature scheduler card for Home Assistant with visual hourly control",
   "main": "dist/temperature-scheduler-card.js",
