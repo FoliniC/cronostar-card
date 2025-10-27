@@ -28,8 +28,7 @@ dragdata_path: /local/chartjs-plugin-dragdata.min.js
 # ============================================================================
 
 # Living Room
-type: custom:temperature-scheduler-card
-title: Living Room Temperature
+type: custom:cronostar-card
 entity_prefix: temperature_living_
 pause_entity: input_boolean.temperature_schedule_living_paused
 profiles_select_entity: input_select.temperature_profiles_living
