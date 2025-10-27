@@ -1,5 +1,5 @@
 /**
- * Utility functions for Temperature Scheduler Card
+ * Utility functions for CronoStar Card
  * @module utils
  */
 

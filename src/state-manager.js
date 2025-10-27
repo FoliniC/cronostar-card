@@ -1,5 +1,5 @@
 /**
- * State management for Temperature Scheduler Card
+ * State management for CronoStar Card
  * @module state-manager
  */
 

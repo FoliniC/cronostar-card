@@ -1,6 +1,6 @@
 
 /**
- * Selection management for Temperature Scheduler Card
+ * Selection management for CronoStar Card
  * @module selection-manager
  */
 

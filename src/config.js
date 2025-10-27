@@ -1,5 +1,5 @@
 /**
- * Configuration management for Temperature Scheduler Card
+ * Configuration management for CronoStar Card
  * @module config
  */
 

@@ -1,6 +1,6 @@
 
 /**
- * Temperature Scheduler Card - Main Component
+ * CronoStar Card - Main Component
  * @module cronostar-card
  */
 import { LitElement, html } from 'lit';

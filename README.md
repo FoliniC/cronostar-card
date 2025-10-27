@@ -29,12 +29,12 @@ Installation is best done via HACS. If you do not have HACS, please install it f
 
 1.  Open HACS in Home Assistant.
 2.  Go to "Frontend" -> Click the "+" button.
-3.  Search for "Scheduler Card" and install it.
+3.  Search for "CronoStar Card" and install it.
 4.  Restart Home Assistant.
 
 ### Manual Installation
 
-1.  Download `cronostar-card.js` from the [latest release](https://github.com/YOUR_USERNAME/cronostar-card/releases).
+1.  Download `cronostar-card.js` from the [latest release](https://github.com/FoliniC/cronostar-card/releases).
 2.  Copy it to your `/config/www/` directory.
 3.  Add it as a resource in Lovelace:
     ```yaml

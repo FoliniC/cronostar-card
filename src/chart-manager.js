@@ -1,5 +1,5 @@
 /**
- * Chart.js management for Temperature Scheduler Card
+ * Chart.js management for CronoStar Card
  * @module chart-manager
  */
 

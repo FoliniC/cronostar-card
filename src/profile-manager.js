@@ -1,5 +1,5 @@
 /**
- * Profile management for Temperature Scheduler Card
+ * Profile management for CronoStar Card
  * @module profile-manager
  */
 

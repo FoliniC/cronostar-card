@@ -1,5 +1,5 @@
 /**
- * Styles for Temperature Scheduler Card
+ * Styles for CronoStar Card
  * @module styles
  */
 
