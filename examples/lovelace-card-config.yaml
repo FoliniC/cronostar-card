@@ -5,14 +5,14 @@
 # ============================================================================
 # Minimal Configuration
 # ============================================================================
-type: custom:temperature-scheduler-card
+type: custom:cronostar-card
 title: Temperature Schedule
 entity_prefix: temperature_hour_
 
 # ============================================================================
 # Full Configuration
 # ============================================================================
-type: custom:temperature-scheduler-card
+type: custom:cronostar-card
 title: Temperature Schedule
 entity_prefix: temperature_hour_
 pause_entity: input_boolean.temperature_schedule_paused
@@ -36,7 +36,7 @@ save_script: script.save_temperature_profile_living
 load_script: script.load_temperature_profile_living
 
 # Bedroom
-type: custom:temperature-scheduler-card
+type: custom:cronostar-card
 title: Bedroom Temperature
 entity_prefix: temperature_bedroom_
 pause_entity: input_boolean.temperature_schedule_bedroom_paused
@@ -52,8 +52,8 @@ load_script: script.load_temperature_profile_bedroom
 views:
   - title: Temperature
     cards:
-      - type: custom:temperature-scheduler-card
-        title: Temperature Schedule
+      - type: custom:cronostar-card
+        title: CronoStar
         entity_prefix: temperature_hour_
 
 # Two Columns (Desktop)
@@ -61,10 +61,10 @@ views:
   - title: Temperature
     type: horizontal-stack
     cards:
-      - type: custom:temperature-scheduler-card
+      - type: custom:cronostar-card
         title: Living Room
         entity_prefix: temperature_living_
-      - type: custom:temperature-scheduler-card
+      - type: custom:cronostar-card
         title: Bedroom
         entity_prefix: temperature_bedroom_
 
@@ -72,7 +72,7 @@ views:
 views:
   - title: Temperature
     cards:
-      - type: custom:temperature-scheduler-card
+      - type: custom:cronostar-card
         title: Temperature Schedule
         entity_prefix: temperature_hour_
       
@@ -89,7 +89,7 @@ views:
 # You will need to create corresponding `input_number` entities
 # (e.g., `input_number.ev_charging_power_00`, etc.).
 
-- type: custom:temperature-scheduler-card
+- type: custom:cronostar-card
   title: EV Charging Schedule
   entity_prefix: ev_charging_power_
   y_axis_label: "Power"

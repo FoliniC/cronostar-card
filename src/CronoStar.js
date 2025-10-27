@@ -1,7 +1,7 @@
 
 /**
  * Temperature Scheduler Card - Main Component
- * @module temperature-scheduler-card
+ * @module cronostar-card
  */
 import { LitElement, html } from 'lit';
 import { cardStyles } from './styles.js';

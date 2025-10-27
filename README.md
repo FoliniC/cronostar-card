@@ -56,7 +56,7 @@ The `preset` option allows you to quickly configure the card. Available presets 
 This is the simplest configuration. It uses the `thermostat` preset by default.
 
 ```yaml
-type: custom:temperature-scheduler-card
+type: custom:cronostar-card
 entity_prefix: temperature_hour_ # Make sure this matches your input_numbers
 ```
 
@@ -65,7 +65,7 @@ entity_prefix: temperature_hour_ # Make sure this matches your input_numbers
 To configure the card for EV charging, set the `preset` to `ev_charging`. You can then override any setting from the preset, like the `title`.
 
 ```yaml
-type: custom:temperature-scheduler-card
+type: custom:cronostar-card
 preset: ev_charging
 title: My EV Charging Schedule
 entity_prefix: ev_charge_hour_ # Make sure this matches your input_numbers
@@ -76,7 +76,7 @@ entity_prefix: ev_charge_hour_ # Make sure this matches your input_numbers
 You can also define everything manually without using a preset by setting the options yourself.
 
 ```yaml
-type: custom:temperature-scheduler-card
+type: custom:cronostar-card
 title: Custom Scheduler
 entity_prefix: my_custom_hour_
 y_axis_label: "My Value"
@@ -90,7 +90,7 @@ step_value: 5
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `type` | string | **required** | `custom:temperature-scheduler-card` |
+| `type` | string | **required** | `custom:cronostar-card` |
 | `preset` | string | `thermostat` | Use a pre-defined configuration (`thermostat` or `ev_charging`). Options can be overridden. Can also be changed from the card's menu. |
 | `entity_prefix` | string | **required** | Prefix for your 24 hourly `input_number` entities. |
 | `title` | string | (from preset) | The card title. |
@@ -130,7 +130,7 @@ See [changelog.md](changelog.md) for version history.
 - ✅ Version patch incremented.
 
 ### v2.22.8
-- ✅ Fixed: `TIMEOUTS` ReferenceError resolved by importing `TIMEOUTS` in `temperature-scheduler-card.js`.
+- ✅ Fixed: `TIMEOUTS` ReferenceError resolved by importing `TIMEOUTS` in `cronostar-card.js`.
 - ✅ Improved: Watermark styling refined to be less intrusive (lighter color, no background).
 - ✅ Improved: Missing entities are now logged as a single, grouped message in the console.
 - ✅ Version patch incremented.
