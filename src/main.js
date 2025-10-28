@@ -17,7 +17,7 @@ window.customCards.push({
   name: 'CronoStar',
   description: 'Visual hourly schedule editor with drag-and-drop control',
   preview: true,
-  documentationURL: 'https://github.com/YOUR_USERNAME/cronostar-card',
+  documentationURL: 'https://github.com/FoliniC/cronostar-card',
 });
 
 Logger.log(
