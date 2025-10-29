@@ -1,9 +1,9 @@
 /**
- * Configuration management for CronoStar Card
+ * Configuration management for Temperature Scheduler Card
  * @module config
  */
 
-export const VERSION = '2.3.0';
+export const VERSION = '3.0.0';
 
 export const PRESETS = {
   thermostat: {

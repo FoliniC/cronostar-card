@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.0.0
+-   **Features**:
+    -   Added long-press support for multi-point selection on mobile devices.
+
 ## v2.3.0
 -   **Improvements**:
     -   Project renamed to CronoStar. The name 'Crono' highlights its scheduling nature, making it clear it's designed for time-based controls, such as thermostats and other daily routines.

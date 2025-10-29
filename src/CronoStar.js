@@ -1,7 +1,7 @@
 
 /**
- * CronoStar Card - Main Component
- * @module cronostar-card
+ * Temperature Scheduler Card - Main Component
+ * @module temperature-scheduler-card
  */
 import { LitElement, html } from 'lit';
 import { cardStyles } from './styles.js';
@@ -53,6 +53,7 @@ export class CronoStarCard extends LitElement {
     this.selectedPreset = 'thermostat';
     this.missingEntities = []; // Initialize
     this.initialLoadComplete = false; // Initialize
+    this.wasLongPress = false;
     // Initialize managers
     this.localizationManager = new LocalizationManager();
     this.stateManager = new StateManager(this);

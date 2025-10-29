@@ -14,6 +14,7 @@ export class PointerHandler {
     this.selEndPx = null;
     this.activePointerId = null;
     this.selectionAdditive = false;
+    this.longPressTimeout = null;
 
     this.onPointerDown = this.onPointerDown.bind(this);
     this.onPointerMove = this.onPointerMove.bind(this);
@@ -125,6 +126,23 @@ export class PointerHandler {
   onPointerDown(e) {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
 
+    // Long-press for touch to enable multi-select
+    if (e.pointerType === 'touch') {
+      const chartMgr = this.card.chartManager;
+      const points = chartMgr?.chart?.getElementsAtEventForMode?.(e, 'nearest', { intersect: true }, true) || [];
+      if (points.length > 0) {
+        this.longPressTimeout = setTimeout(() => {
+          this.card.wasLongPress = true;
+          const selMgr = this.card.selectionManager;
+          const index = points[0].index;
+          selMgr.toggleIndexSelection(index);
+          chartMgr.updatePointStyling(selMgr.selectedPoint, selMgr.selectedPoints);
+          chartMgr.update();
+          this.longPressTimeout = null;
+        }, 500); // 500ms for long press
+      }
+    }
+
     const chartMgr = this.card.chartManager;
     const points = chartMgr?.chart?.getElementsAtEventForMode?.(e, 'nearest', { intersect: true }, true) || [];
     const clickOnPoint = points.length > 0;
@@ -167,6 +185,10 @@ export class PointerHandler {
    * @param {PointerEvent} e - Pointer event
    */
   onPointerMove(e) {
+    if (this.longPressTimeout) {
+      clearTimeout(this.longPressTimeout);
+      this.longPressTimeout = null;
+    }
     if (!this.isSelecting) return;
     if (this.activePointerId !== null && e.pointerId !== this.activePointerId) return;
 
@@ -181,6 +203,20 @@ export class PointerHandler {
    * @param {PointerEvent} e - Pointer event
    */
   onPointerUp(e) {
+    if (this.longPressTimeout) {
+      clearTimeout(this.longPressTimeout);
+      this.longPressTimeout = null;
+    }
+
+    if (this.card.wasLongPress) {
+      this.card.wasLongPress = false; // Reset for next click
+      // Prevent chart's own click handler from firing
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      return;
+    }
+
     if (!this.isSelecting) return;
     if (this.activePointerId !== null && e.pointerId !== this.activePointerId) return;
 

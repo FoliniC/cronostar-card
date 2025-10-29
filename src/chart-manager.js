@@ -1,5 +1,5 @@
 /**
- * Chart.js management for CronoStar Card
+ * Chart.js management for Temperature Scheduler Card
  * @module chart-manager
  */
 
@@ -171,6 +171,7 @@ export class ChartManager {
       }
     };
 
+    // LOG: Start custom Y-axis for switch preset
     if (this.card.config.is_switch_preset) {
       Logger.log('DEBUG', '[getChartOptions] Configuring custom Y-axis ticks for switch preset');
       yScaleConfig.beginAtZero = true;
@@ -193,6 +194,7 @@ export class ChartManager {
         }
       };
     }
+    // LOG: End custom Y-axis for switch preset
 
     return {
       responsive: true,
@@ -219,8 +221,8 @@ export class ChartManager {
   }
 
   /**
-   * Get drag data plugin options
-   * @returns {Object}
+   * Recreate chart options (called when config changes)
+   * @returns {boolean}
    */
   recreateChartOptions() {
     Logger.log('DEBUG', '[recreateChartOptions] called');
@@ -274,7 +276,6 @@ export class ChartManager {
           Logger.log('DEBUG', '[onDragStart] pointerHandler is selecting, abort');
           return false;
         }
-
         const selMgr = this.card.selectionManager;
         if (!selMgr) {
           Logger.log('DEBUG', '[onDragStart] No selectionManager');
@@ -285,15 +286,12 @@ export class ChartManager {
         } else {
           selMgr.setAnchor(index);
         }
-
-        // Record start values
         this.dragStartValues = {};
         const currentData = this.chart.data.datasets[0].data;
         selMgr.getSelectedPoints().forEach(i => {
           this.dragStartValues[i] = currentData[i] ?? this.card.stateManager.scheduleData[i];
         });
         this.dragAnchorIndex = index;
-
         this.updatePointStyling(selMgr.selectedPoint, selMgr.selectedPoints);
         selMgr.logSelection("onDragStart");
         return true;
@@ -301,19 +299,16 @@ export class ChartManager {
       onDrag: (e, datasetIndex, index, value) => {
         Logger.log('DEBUG', `[onDrag] index=${index} value=${value}`);
         if (!this.dragStartValues || this.dragAnchorIndex === null) return;
-
         const anchorStartVal = this.dragStartValues[this.dragAnchorIndex];
         const delta = value - anchorStartVal;
         const dataset = this.chart.data.datasets[0];
         const selMgr = this.card.selectionManager;
-
         selMgr.getSelectedPoints().forEach(i => {
           let newVal = this.dragStartValues[i] + delta;
           newVal = clamp(newVal, this.card.config.min_value, this.card.config.max_value);
           newVal = roundTo(newVal, this.card.config.is_switch_preset ? 0 : 1);
           dataset.data[i] = newVal;
         });
-
         this.chart.update('none');
         this.showDragValueDisplay(selMgr.getSelectedPoints(), dataset.data);
       },
@@ -323,12 +318,10 @@ export class ChartManager {
         if (canvas) {
           canvas.style.cursor = 'default';
         }
-
         const dataset = this.chart.data.datasets[0];
         const selMgr = this.card.selectionManager;
         const stateMgr = this.card.stateManager;
         const indices = selMgr.getActiveIndices();
-
         const newData = [...stateMgr.scheduleData];
         indices.forEach(i => {
           let finalValue = dataset.data[i];
@@ -336,17 +329,13 @@ export class ChartManager {
           newData[i] = finalValue;
         });
         stateMgr.setData(newData);
-
         stateMgr.logPersistedValues("dragEnd", indices);
         indices.forEach(i => {
           stateMgr.updateTemperatureAtHour(i, newData[i]);
         });
-
         selMgr.setAnchor(index);
         this.updatePointStyling(selMgr.selectedPoint, selMgr.selectedPoints);
         this.hideDragValueDisplay();
-
-        // Reset drag state
         this.dragStartValues = null;
         this.dragAnchorIndex = null;
       },
@@ -358,12 +347,16 @@ export class ChartManager {
    * @param {Event} e - Click event
    */
   handleChartClick(e) {
+    if (this.card.wasLongPress) {
+      this.card.wasLongPress = false; // Reset for next click
+      return;
+    }
+
     Logger.log('DEBUG', '[handleChartClick] called');
     if (Date.now() < this.card.suppressClickUntil) {
       Logger.log('DEBUG', '[handleChartClick] Click suppressed');
       return;
     }
-
     const points = this.chart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true);
     const isAdditive = !!(this.card.keyboardHandler?.ctrlDown || 
                           this.card.keyboardHandler?.metaDown || 
@@ -383,7 +376,6 @@ export class ChartManager {
         selMgr.clearSelection();
       }
     }
-
     this.updatePointStyling(selMgr.selectedPoint, selMgr.selectedPoints);
     if (this.chartInitialized) this.chart.update();
     selMgr.logSelection("onClick");
@@ -402,14 +394,10 @@ export class ChartManager {
     }
     const dataset = this.chart.data.datasets[0];
     const len = Array.isArray(dataset.data) ? dataset.data.length : 24;
-
-    // Reset all points
     dataset.pointRadius = Array(len).fill(CHART_DEFAULTS.pointRadius);
     dataset.pointBackgroundColor = Array(len).fill(COLORS.primary);
     dataset.pointBorderColor = Array(len).fill(COLORS.primary);
     dataset.pointBorderWidth = Array(len).fill(CHART_DEFAULTS.borderWidth);
-
-    // Style selected points
     if (Array.isArray(selectedPoints) && selectedPoints.length > 0) {
       selectedPoints.forEach(idx => {
         if (idx >= 0 && idx < len) {
@@ -421,8 +409,6 @@ export class ChartManager {
         }
       });
     }
-
-    // Style anchor point
     if (anchorPoint !== null && anchorPoint >= 0 && anchorPoint < len) {
       dataset.pointRadius[anchorPoint] = 9;
       dataset.pointBorderWidth[anchorPoint] = 3;
@@ -447,10 +433,8 @@ export class ChartManager {
     const localize = (key, search, replace) => this.card.localizationManager.localize(this.card.language, key, search, replace);
     const leftmostIndex = Math.min(...indices);
     const leftmostValue = data[leftmostIndex];
-    
     displayElement.style.display = 'block';
     displayElement.textContent = localize('ui.value_display', {'{value}': leftmostValue, '{unit}': this.card.config.unit_of_measurement});
-
     const meta = this.chart.getDatasetMeta(0);
     const pointElement = meta.data[leftmostIndex];
     if (pointElement) {
@@ -490,7 +474,6 @@ export class ChartManager {
     }
     const containerRect = container.getBoundingClientRect();
     const canvasRect = canvas.getBoundingClientRect();
-
     const offsetX = canvasRect.left - containerRect.left;
     const offsetY = canvasRect.top - containerRect.top;
     Logger.log('DEBUG', `[getContainerRelativePointCoords] OffsetX=${offsetX} OffsetY=${offsetY}`);
