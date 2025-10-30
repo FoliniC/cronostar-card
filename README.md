@@ -204,3 +204,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ---
 
 **Made with ❤️ for Home Assistant**
+
+## Support
+
+If you find this integration useful, you can [buy me a glass of white wine](https://buymeacoffee.com/carlofolinf).
