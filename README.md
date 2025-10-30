@@ -24,12 +24,7 @@ A powerful and intuitive Lovelace card for managing hourly schedules in Home Ass
 ## 🚀 Quick Start
 
 ### 💡 Simple Usage
-
-**Italiano:**
-> Aggiungi il componente, configura le entità dei valori per ogni ora (le trovi già pronte nel log del browser F12) e usale nella tua automazione. Fine!
-
-**English:**
-> Add the component, configure the value entities for each hour (you can find them ready in the browser log F12) and use them in your automation. Done!
+Add the component, configure the value entities for each hour (you can find them ready in the browser log F12) and use them in your automation. Done!
 
 ### Installation
 
