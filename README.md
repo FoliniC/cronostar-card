@@ -1,4 +1,5 @@
 # CronoStar
+<!-- <meta name="google-site-verification" content="dPIXbzV19uN2zYVBczPV2Fa1Q2iK1Unn85WAl4Ixy28"> -->
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/integration)
 [![GitHub Release](https://img.shields.io/github/release/FoliniC/cronostar-card.svg)](https://github.com/FoliniC/cronostar-card/releases)
