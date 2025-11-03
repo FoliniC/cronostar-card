@@ -1,6 +1,18 @@
 # CronoStar
-<!-- <meta name="google-site-verification" content="dPIXbzV19uN2zYVBczPV2Fa1Q2iK1Unn85WAl4Ixy28"> -->
-<meta name="google-site-verification" content="dPIXbzV19uN2zYVBczPV2Fa1Q2iK1Unn85WAl4Ixy28" />
+<!-- <meta name="google-site-verification" content="dPIXbzV19uN2zYVBczPV2Fa1Q2iK1Unn85WAl4Ixy28"> 
+&#60;meta name=&#34;google-site-verification&#34; content=&#34;dPIXbzV19uN2zYVBczPV2Fa1Q2iK1Unn85WAl4Ixy28&#34;&#62;
+< meta name="google-site-verification" content="dPIXbzV19uN2zYVBczPV2Fa1Q2iK1Unn85WAl4Ixy28" >
+`<meta name="google-site-verification" content="dPIXbzV19uN2zYVBczPV2Fa1Q2iK1Unn85WAl4Ixy28">`
+
+-->
+```html
+<meta name="google-site-verification" content="dPIXbzV19uN2zYVBczPV2Fa1Q2iK1Unn85WAl4Ixy28">```
+
+
+```markdown
+<‍meta name="google-site-verification" content="dPIXbzV19uN2zYVBczPV2Fa1Q2iK1Unn85WAl4Ixy28">
+```
+
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/integration)
 [![GitHub Release](https://img.shields.io/github/release/FoliniC/cronostar-card.svg)](https://github.com/FoliniC/cronostar-card/releases)
@@ -13,6 +25,8 @@ A powerful and intuitive Lovelace card for managing hourly schedules in Home Ass
 ## ✨ Features
 
 - ✅ **Generic Scheduler** - Configure for any hourly value: temperature, power, etc.
+`<meta name="google-site-verification" content="dPIXbzV19uN2zYVBczPV2Fa1Q2iK1Unn85WAl4Ixy28">`
+
 - 📊 **Visual Schedule Editor** - Interactive Chart.js graph with drag-and-drop control.
 - 🎯 **Multi-Point Selection** - Select and modify multiple hours simultaneously (Shift + drag).
 - ⌨️ **Advanced Keyboard Controls** - Precise adjustments with arrow keys, plus Ctrl+A for select all.
