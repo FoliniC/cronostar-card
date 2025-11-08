@@ -1,0 +1,163 @@
+# File: cronostar-card/scripts/cronostar_profiles_script.yaml
+# Script per salvare e caricare i profili di temperatura usando JSON
+
+cronostar_save_profile:
+  alias: Salva Profilo CronoStar (JSON)
+  mode: queued
+  fields:
+    profile_name:
+      description: "Nome del profilo da salvare"
+      example: "Comfort"
+    entity_prefix:
+      description: "Prefisso delle entità (es: temperature_hour_)"
+      example: "temperature_hour_"
+    hour_base:
+      description: "Base numerica ore (0 per 00-23, 1 per 01-24)"
+      example: "0"
+  sequence:
+    - variables:
+        profile_slug: "{{ (profile_name | default(states('input_select.temperature_profiles'))) | slugify }}"
+        per_profile_entity: "input_text.temperature_profile_{{ profile_slug }}"
+        prefix: "{{ entity_prefix | default('temperature_hour_') }}"
+        base: "{{ hour_base | int(0) }}"
+
+    # Log inizio salvataggio
+    - action: system_log.write
+      data:
+        message: "[SAVE] Inizio salvataggio profilo '{{ profile_slug }}' con prefix='{{ prefix }}' base={{ base }}"
+        level: info
+
+    # Costruisci JSON con tutti i 24 valori
+    - action: input_text.set_value
+      target:
+        entity_id: "{{ per_profile_entity }}"
+      data:
+        value: >-
+          {%- set ns = namespace(values=[]) -%}
+          {%- for i in range(24) -%}
+            {%- set hour_num = i + base -%}
+            {%- set hour_str = '%02d' | format(hour_num) -%}
+            {%- set entity_id = 'input_number.' ~ prefix ~ hour_str -%}
+            {%- set v = states(entity_id) | float(20) -%}
+            {%- set ns.values = ns.values + [v] -%}
+          {%- endfor -%}
+          {{- ns.values | to_json -}}
+
+    # Log conferma salvataggio con primi 6 valori
+    - action: system_log.write
+      data:
+        message: "[SAVE] Profilo '{{ profile_slug }}' salvato. Primi 6 valori: {{ (states(per_profile_entity) | default('[]') | from_json)[:6] }}"
+        level: info
+
+    - action: persistent_notification.create
+      data:
+        title: "✅ Profilo Salvato"
+        notification_id: "profile_save_success_{{ profile_slug }}"
+        message: |
+          Profilo '{{ profile_name }}' salvato con successo!
+          Entità: {{ per_profile_entity }}
+          Valori (00-05): {{ (states(per_profile_entity) | default('[]') | from_json)[:6] }}
+
+cronostar_load_profile:
+  alias: Carica Profilo CronoStar (da Sensore o Input Text)
+  mode: single
+  fields:
+    profile_name:
+      description: "Nome del profilo da caricare"
+      example: "Comfort"
+    entity_prefix:
+      description: "Prefisso delle entità (es: temperature_hour_)"
+      example: "temperature_hour_"
+    hour_base:
+      description: "Base numerica ore (0 per 00-23, 1 per 01-24)"
+      example: "0"
+  sequence:
+    - variables:
+        profile_slug: "{{ (profile_name | default(states('input_select.temperature_profiles'))) | slugify }}"
+        per_profile_entity: "input_text.temperature_profile_{{ profile_slug }}"
+        prefix: "{{ entity_prefix | default('temperature_hour_') }}"
+        base: "{{ hour_base | int(0) }}"
+
+        # Prova a caricare dal sensore, altrimenti dall'input_text
+        schedule_data: >-
+          {%- set sensor_data = state_attr('sensor.temperature_profile_data_loader', 'profile_values') -%}
+          {%- if sensor_data is iterable and sensor_data | count == 24 -%}
+            {{ sensor_data }}
+          {%- else -%}
+            {%- set text_data = states(per_profile_entity) -%}
+            {%- if text_data not in ['unknown', 'unavailable', ''] -%}
+              {{ text_data | from_json }}
+            {%- else -%}
+              []
+            {%- endif -%}
+          {%- endif -%}
+
+    # Log inizio caricamento
+    - action: system_log.write
+      data:
+        message: "[LOAD] Inizio caricamento profilo '{{ profile_slug }}' da {{ per_profile_entity }}. Dati (00-05): {{ schedule_data[:6] if schedule_data is iterable else 'ERRORE' }}"
+        level: info
+
+    # Verifica validità dati
+    - if:
+        - condition: template
+          value_template: "{{ schedule_data is iterable and schedule_data | count == 24 }}"
+      then:
+        # Carica ogni valore negli input_number
+        - repeat:
+            count: 24
+            sequence:
+              - variables:
+                  # repeat.index parte da 1, quindi sottraiamo 1 per ottenere l'indice array (0-23)
+                  array_index: "{{ repeat.index - 1 }}"
+                  hour_num: "{{ array_index | int + base }}"
+                  hour_str: "{{ '%02d' | format(hour_num) }}"
+                  entity_id: "input_number.{{ prefix }}{{ hour_str }}"
+                  val: "{{ schedule_data[array_index | int] | float(20) }}"
+
+              # Log ogni set_value
+              - action: system_log.write
+                data:
+                  message: "[LOAD] Setto {{ entity_id }} = {{ val }} (array_idx={{ array_index }}, hour={{ hour_str }})"
+                  level: debug
+
+              - action: input_number.set_value
+                target:
+                  entity_id: "{{ entity_id }}"
+                data:
+                  value: "{{ val }}"
+
+        # Breve pausa per permettere la propagazione degli stati
+        - delay:
+            milliseconds: 300
+
+        # Log conferma caricamento
+        - action: system_log.write
+          data:
+            message: "[LOAD] Profilo '{{ profile_slug }}' caricato completamente. Verifica (00-05): {{ [states('input_number.' ~ prefix ~ '00'), states('input_number.' ~ prefix ~ '01'), states('input_number.' ~ prefix ~ '02'), states('input_number.' ~ prefix ~ '03'), states('input_number.' ~ prefix ~ '04'), states('input_number.' ~ prefix ~ '05')] }}"
+            level: info
+
+        - action: persistent_notification.create
+          data:
+            title: "✅ Profilo Caricato"
+            notification_id: "profile_load_success_{{ profile_slug }}"
+            message: |
+              Profilo '{{ profile_name }}' caricato con successo!
+              Valori (00-05): {{ schedule_data[:6] }}
+
+      else:
+        # Errore: dati non validi
+        - action: system_log.write
+          data:
+            message: "[LOAD] ERRORE: Dati profilo '{{ profile_slug }}' invalidi o incompleti. Conteggio: {{ schedule_data | count if schedule_data is iterable else 'N/A' }}"
+            level: error
+
+        - action: persistent_notification.create
+          data:
+            title: "❌ Errore Caricamento Profilo"
+            notification_id: "profile_load_error_{{ profile_slug }}"
+            message: |
+              Impossibile caricare il profilo '{{ profile_name }}'.
+              Dati ricevuti: {{ schedule_data | count if schedule_data is iterable else 'non validi' }} elementi
+              Attesi: 24 elementi
+              Fonte: {{ per_profile_entity }}

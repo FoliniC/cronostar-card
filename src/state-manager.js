@@ -13,6 +13,12 @@ export class StateManager {
     this.isLoadingProfile = false;
     this.missingEntities = []; // New property
     this.missingEntitiesLogged = false; // New flag
+    this.cooldownUntil = 0;
+  }
+
+  startCooldown(ms) {
+    this.cooldownUntil = Date.now() + ms;
+    Logger.debug('STATE', `Cooldown started for ${ms}ms`);
   }
 
   /**
@@ -21,6 +27,11 @@ export class StateManager {
    * @returns {boolean} True if data changed
    */
   updateFromHass(hass) {
+    if (Date.now() < this.cooldownUntil) {
+      Logger.debug('STATE', 'Update ignored during cooldown period.');
+      return false;
+    }
+
     const newData = [];
     let dataChanged = false;
     const currentMissingEntities = []; // Collect missing entities for this update cycle
@@ -31,13 +42,16 @@ export class StateManager {
       let newValue = null;
       if (stateObj) {
         newValue = safeParseFloat(stateObj.state);
+        Logger.verbose('STATE', `updateFromHass loop [h:${hour}] [id:${entityId}]: state='${stateObj.state}', parsedValue=${newValue}`);
       } else {
         currentMissingEntities.push(entityId); // Add to current missing entities
         newValue = this.scheduleData[hour] !== null ? this.scheduleData[hour] : this.card.config.min_value;
+        Logger.verbose('STATE', `updateFromHass loop [h:${hour}] [id:${entityId}]: entity not found, using value=${newValue}`);
       }
       
       if (this.scheduleData[hour] !== newValue) {
         dataChanged = true;
+        Logger.debug('STATE', `Read from hass: ${entityId} -> ${newValue} (old value: ${this.scheduleData[hour]})`);
       }
       newData[hour] = newValue;
     }
@@ -49,18 +63,18 @@ export class StateManager {
 
     if (this.missingEntities.length > 0 && (!this.missingEntitiesLogged || missingEntitiesChanged)) {
       const groupedEntities = this.groupMissingEntities(this.missingEntities);
-      Logger.warn('STATE', `Missing ${this.missingEntities.length} entities. Using default values. Please create the following input_number entities:\n\n${groupedEntities}`);
+      Logger.config('STATE', `Missing ${this.missingEntities.length} entities. Using default values. Please create the following input_number entities:\n\n${groupedEntities}`);
       this.missingEntitiesLogged = true; // Mark as logged
     } else if (this.missingEntities.length === 0) {
       this.missingEntitiesLogged = false; // Reset if no missing entities
     }
 
     if (dataChanged && !this.isLoadingProfile) {
-      Logger.state("Schedule data updated from hass. Hours 00-05:", newData.slice(0, 6));
+      Logger.debug("STATE", "Schedule data updated from hass. Hours 00-05:", newData.slice(0, 6));
       this.scheduleData = newData;
       return true;
     } else if (dataChanged && this.isLoadingProfile) {
-      Logger.state("Update ignored during profile loading");
+      Logger.debug("STATE", "Update ignored during profile loading");
       return false;
     }
 
@@ -94,7 +108,8 @@ export class StateManager {
    */
   updateTemperatureAtHour(hour, value) {
     const entityId = this.getEntityIdForHour(hour);
-    Logger.memo(`set_value call -> entity=${entityId} hour=${this.getHourLabel(hour)} value=${value}`);
+    Logger.debug('MEMO', `set_value call -> entity=${entityId} hour=${this.getHourLabel(hour)} value=${value}`);
+    Logger.debug('STATE', `Setting ${entityId} to ${value}`);
     
     this.card.hass.callService("input_number", "set_value", {
       entity_id: entityId,
@@ -122,7 +137,7 @@ export class StateManager {
         const current = safeParseFloat(raw);
         
         if (current !== null && Math.abs(current - expectedValue) <= tolerance) {
-          Logger.memo(`State confirmed -> entity=${entityId}, expected=${expectedValue}, current=${current}`);
+          Logger.debug('MEMO', `State confirmed -> entity=${entityId}, expected=${expectedValue}, current=${current}`);
           resolve();
           return;
         }
@@ -145,14 +160,14 @@ export class StateManager {
    */
   async ensureValuesApplied() {
     const promises = [];
-    Logger.memo("Ensuring values applied. Dirty indices:", Array.from(this.dirtyIndices));
+    Logger.debug("MEMO", "Ensuring values applied. Dirty indices:", Array.from(this.dirtyIndices));
 
     for (const hour of Array.from(this.dirtyIndices)) {
       const entityId = this.getEntityIdForHour(hour);
       const expected = this.scheduleData[hour];
       
       if (expected !== null) {
-        Logger.memo(`Waiting for entity sync -> hour=${this.getHourLabel(hour)}, entity=${entityId}, expected=${expected}`);
+        Logger.debug('MEMO', `Waiting for entity sync -> hour=${this.getHourLabel(hour)}, entity=${entityId}, expected=${expected}`);
         promises.push(
           this.waitForEntityNumericState(entityId, expected, 4000, 0.001)
             .catch(err => Logger.warn('MEMO', `Wait failed for ${entityId}:`, err))
@@ -177,7 +192,7 @@ export class StateManager {
       const entityId = this.getEntityIdForHour(hour);
       const label = this.getHourLabel(hour);
       const value = this.scheduleData[hour];
-      Logger.memo(`${context} -> hour=${label}, entity=${entityId}, value=${value}`);
+      Logger.debug('MEMO', `${context} -> hour=${label}, entity=${entityId}, value=${value}`);
     });
   }
 
@@ -194,7 +209,6 @@ export class StateManager {
     entities.forEach(entityId => {
       const match = entityId.match(/^(input_number\.(.+?))_(\d{1,2})$/);
       if (match) {
-        const fullPrefix = match[1]; // e.g., input_number.temperature_hour
         const prefixName = match[2]; // e.g., temperature_hour
         const hour = parseInt(match[3], 10);
         const formattedHour = hour.toString().padStart(2, '0');

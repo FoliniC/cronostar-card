@@ -5,7 +5,6 @@
  */
 
 import { Logger, clamp, roundTo } from './utils.js';
-import { CHART_DEFAULTS } from './config.js';
 
 export class KeyboardHandler {
   constructor(card) {
@@ -37,6 +36,7 @@ export class KeyboardHandler {
    * @param {KeyboardEvent} e - Keyboard event
    */
   handleKeydown(e) {
+    Logger.key(`Keydown event: key=${e.key}, ctrl=${this.ctrlDown}, meta=${this.metaDown}, enabled=${this.enabled}`);
     if (!this.enabled) return;
 
     if (e.key === "Control") {
@@ -50,6 +50,7 @@ export class KeyboardHandler {
 
     if ((this.ctrlDown || this.metaDown) && e.key === 'a') {
         e.preventDefault();
+        Logger.key('Ctrl+A detected, selecting all.');
         this.card.selectionManager.selectAll();
         return;
     }
@@ -91,7 +92,15 @@ export class KeyboardHandler {
     // Hide value display on key release
     if (e.key === "ArrowUp" || e.key === "ArrowDown" || 
         e.key === "ArrowLeft" || e.key === "ArrowRight") {
-      this.card.chartManager?.hideDragValueDisplay();
+      const chartMgr = this.card.chartManager;
+      if (chartMgr) {
+        if (chartMgr.hideValueDisplayTimeout) {
+          clearTimeout(chartMgr.hideValueDisplayTimeout);
+        }
+        chartMgr.hideValueDisplayTimeout = setTimeout(() => {
+          chartMgr.hideDragValueDisplay();
+        }, 1500);
+      }
     }
   }
 
@@ -115,6 +124,10 @@ export class KeyboardHandler {
 
     const stateMgr = this.card.stateManager;
     const chartMgr = this.card.chartManager;
+    if (chartMgr.hideValueDisplayTimeout) {
+      clearTimeout(chartMgr.hideValueDisplayTimeout);
+      chartMgr.hideValueDisplayTimeout = null;
+    }
     const dataset = chartMgr.chart.data.datasets[0];
 
     let targetIndex;
@@ -158,6 +171,10 @@ export class KeyboardHandler {
     const selMgr = this.card.selectionManager;
     const stateMgr = this.card.stateManager;
     const chartMgr = this.card.chartManager;
+    if (chartMgr.hideValueDisplayTimeout) {
+      clearTimeout(chartMgr.hideValueDisplayTimeout);
+      chartMgr.hideValueDisplayTimeout = null;
+    }
     const dataset = chartMgr.chart.data.datasets[0];
     const newData = [...stateMgr.scheduleData];
 
@@ -165,7 +182,10 @@ export class KeyboardHandler {
 
     indices.forEach(i => {
       let val = (dataset.data[i] ?? stateMgr.scheduleData[i]) + delta;
-      val = clamp(val, this.card.config.min_value, this.card.config.max_value);
+      const max_val = this.card.config.allow_max_value
+          ? this.card.config.max_value + this.card.config.step_value
+          : this.card.config.max_value;
+      val = clamp(val, this.card.config.min_value, max_val);
       val = roundTo(val, 1);
       dataset.data[i] = val;
       newData[i] = val;

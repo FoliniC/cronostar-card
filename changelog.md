@@ -1,5 +1,40 @@
 # Changelog
 
+## 3.3.0 (2025-11-08)
+
+### Added
+- New 'Max' value option for scheduling, allowing dynamic power calculations (e.g., from `sensor.current_charging_power_calculated`).
+- Automatic profile loading on card initialization or when the selected profile changes.
+- Informational section in the settings menu to display current configuration details (entity prefix, profile entity, etc.) for easier debugging.
+
+### Changed
+- Improved "Add new profile" feature: now provides comprehensive YAML snippets in a custom UI (multi-line, copyable text area) for `input_text` and `input_select` entities, presented in two separate steps.
+- Refactored profile loading mechanism: The card now directly reads profile data from `input_text` entities, updates its internal state and chart, and then calls the Home Assistant script to synchronize `input_number` entities.
+
+### Fixed
+- Resolved "Failed to save new profile" error when creating new profiles from the UI.
+- Updated and corrected internationalization strings for English and Italian.
+- The chart now correctly reappears after closing the "Add new profile" YAML display dialog.
+- Implemented a cooldown period after profile loading to prevent race conditions that caused data corruption, especially for floating-point values.
+- Corrected the generated YAML format for `input_select` entities when adding new profiles, ensuring compatibility with `!include_dir_merge_named` configurations.
+- Corrected the `load_ev_charging_profile` script to explicitly convert values to floats before setting `input_number` entities, resolving issues with incorrect loading of floating-point values.
+- Resolved "Canvas is already in use" error by implementing aggressive canvas cleanup before chart initialization and after chart destruction.
+
+## 3.1.0 (2025-11-06)
+
+### Added
+- Multi-level logging system (`none`, `error`, `warn`, `info`, `debug`, `verbose`).
+- UI dropdown for selecting log level.
+
+### Changed
+- Replaced `logging_enabled` configuration with `log_level`.
+- Re-categorized log messages to appropriate levels.
+- Improved `Chart.js` loading mechanism to prevent race conditions and "Canvas is already in use" errors.
+
+### Fixed
+- Chart disappearing bug on view navigation.
+- `Logger.log is not a function` error.
+
 ## v3.0.0
 -   **Features**:
     -   Added long-press support for multi-point selection on mobile devices.
@@ -125,7 +160,7 @@
 -   **Features**:
     -   Added a settings menu with options for language selection and help.
     -   Implemented internationalization with support for English and Italian.
-    -   Added `Ctrl+A` keyboard shortcut to select all points on the chart.
+    -   Added `Ctrl+A` keyboard shortcut to select all points.
     -   The settings menu includes a "Select All" option.
 -   **Changes**:
     -   The behavior of the left and right arrow keys has been updated. They now align the temperature of all selected points to the value of the leftmost or rightmost selected point, respectively.

@@ -19,7 +19,8 @@ A powerful and intuitive Lovelace card for managing hourly schedules in Home Ass
 - 💾 **Profile Management** - Save and load multiple schedule profiles.
 - 🔄 **Auto-Save** - Automatically saves changes when switching profiles.
 - 📱 **Responsive Design** - Works on desktop, tablet, and mobile.
-- 🎨 **Theme Integration** - Respects Home Assistant themes.
+- ✅ **Theme Integration** - Respects Home Assistant themes.
+- ✅ **Dynamic 'Max' Value** - Set schedule points to a dynamic maximum value, ideal for solar-optimized EV charging.
 
 ## 🚀 Quick Start
 
@@ -89,6 +90,122 @@ max_value: 100
 step_value: 5
 ```
 
+## 🏠 Home Assistant Configuration
+
+To function, the CronoStar card requires several helper entities to be defined in your Home Assistant configuration (e.g., `input_number` for each hour, `input_select` for profiles). There are two main ways to organize these entities.
+
+### Method 1: Split Configuration (Recommended)
+
+This method uses Home Assistant's directory merge features to keep your `configuration.yaml` clean and your entities organized in separate files.
+
+**1. Directory Structure**
+
+Create a folder (e.g., `yaml_generator`) inside your main `/config` directory with the following structure:
+
+```
+<config>/
+├── configuration.yaml
+└── yaml_generator/
+    ├── input_number/
+    │   └── cronostar_schedule.yaml
+    ├── input_select/
+    │   └── cronostar_schedule.yaml
+    ├── input_text/
+    │   └── cronostar_schedule.yaml
+    └── scripts/
+        └── cronostar_schedule.yaml
+```
+
+**2. Main `configuration.yaml`**
+
+Add the following lines to your main `configuration.yaml` file to tell Home Assistant to load the configuration from the directories you created:
+
+```yaml
+# configuration.yaml
+input_number: !include_dir_merge_named yaml_generator/input_number
+input_select: !include_dir_merge_named yaml_generator/input_select
+input_text: !include_dir_merge_named yaml_generator/input_text
+script: !include_dir_merge_named yaml_generator/scripts
+```
+
+**3. Entity Configuration Files**
+
+Inside each file (e.g., `cronostar_schedule.yaml`), define your entities without the top-level domain key.
+
+Example for `yaml_generator/input_number/cronostar_schedule.yaml`:
+```yaml
+# Note: "input_number:" is NOT needed here
+ev_charging_power_00:
+  name: "EV Power 00:00"
+  min: 0
+  max: 7.5
+  step: 0.5
+```
+
+Example for `yaml_generator/input_select/cronostar_schedule.yaml`:
+```yaml
+# Note: "input_select:" is NOT needed here
+ev_charging_profiles:
+  name: "EV Charging Profiles"
+  options:
+    - "Notturno"
+    - "Sempre"
+```
+
+*   **Pros**: Keeps `configuration.yaml` clean. Easy to manage and find entities. Modular and scalable.
+*   **Cons**: Requires a specific directory structure.
+
+### Method 2: Single File Configuration
+
+Alternatively, you can define all entities directly in your main `configuration.yaml` file. This is simpler for small setups but can become difficult to manage.
+
+**Example `configuration.yaml`**
+
+```yaml
+# configuration.yaml
+
+input_number:
+  ev_charging_power_00:
+    name: "EV Power 00:00"
+    min: 0
+    max: 7.5
+    step: 0.5
+  ev_charging_power_01:
+    name: "EV Power 01:00"
+    min: 0
+    max: 7.5
+    step: 0.5
+  # ... and so on for all 24 hours
+
+input_select:
+  ev_charging_profiles:
+    name: "EV Charging Profiles"
+    options:
+      - "Notturno"
+      - "Sempre"
+
+input_text:
+  ev_charging_profile_notturno:
+    name: "Profile Notturno (JSON)"
+    max: 255
+  ev_charging_profile_sempre:
+    name: "Profile Sempre (JSON)"
+    max: 255
+
+script:
+  load_ev_charging_profile:
+    alias: "Load EV Charging Profile"
+    # ... script sequence ...
+  save_ev_charging_profile:
+    alias: "Save EV Charging Profile"
+    # ... script sequence ...
+```
+
+*   **Pros**: Simple for very few entities. Everything is in one file.
+*   **Cons**: `configuration.yaml` becomes very long and hard to read. Higher risk of YAML indentation errors.
+
+For these reasons, the **Split Configuration** method is highly recommended.
+
 ## 📊 Options Reference
 
 | Option | Type | Default | Description |
@@ -101,13 +218,14 @@ step_value: 5
 | `unit_of_measurement` | string | (from preset) | Unit of measurement to display. |
 | `min_value` | number | (from preset) | Minimum value for the Y-axis. |
 | `max_value` | number | (from preset) | Maximum value for the Y-axis. |
+| `allow_max_value` | boolean | `false` | Enables a 'Max' value on the Y-axis, allowing schedule points to represent a dynamic maximum (e.g., available solar power). |
 | `step_value` | number | (from preset) | Step for value adjustments. |
 | `pause_entity` | string | - | `input_boolean` entity to pause/resume the schedule. |
 | `profiles_select_entity` | string | - | `input_select` entity for profile selection. |
 | `save_script` | string | `script.save_temperature_profile` | Script to save profiles. |
 | `load_script` | string | `script.load_temperature_profile` | Script to load profiles. |
 | `hour_base` | number/string | `auto` | Hour numbering: `0` (00-23) or `1` (01-24). |
-| `logging_enabled` | boolean | `false` | Enable/disable detailed logging in the browser console. Can also be toggled from the card's menu. |
+| log_level | string | 'info' | Sets the logging level: 'none', 'error', 'warn', 'info', 'debug', 'verbose'. Can also be toggled from the card's menu. |
 | `chartjs_path` | string | `/local/chart.min.js` | Path to Chart.js library. |
 | `dragdata_path` | string | `/local/chartjs-plugin-dragdata.min.js` | Path to the Chart.js drag data plugin. |
 
@@ -115,71 +233,6 @@ step_value: 5
 ## 📝 Changelog
 
 See [changelog.md](changelog.md) for version history.
-
-## v2.3.0 (Latest)
-- ✅ Improved: Project renamed to CronoStar. The name 'Crono' highlights its scheduling nature, making it clear it's designed for time-based controls, such as thermostats and other daily routines.
-
-### v2.22.11 
-- ✅ Fixed: Logging visibility issue resolved; `Logger.warn` now respects `logging_enabled` setting.
-- ✅ Fixed: Interface no longer unresponsive when 'Anomalous operation' message is displayed (pointer events are now ignored by the overlay).
-- ✅ Improved: Missing entities warning is now logged only once per change in missing entities list.
-- ✅ Improved: Watermark styling further refined to be less intrusive.
-- ✅ Version patch incremented.
-
-### v2.22.9
-- ✅ Fixed: Logging visibility issue resolved by replacing direct `console.log` calls with `Logger.log`.
-- ✅ Improved: Watermark styling refined to be less intrusive (transparent background, lighter color, dynamic text).
-- ✅ Improved: Default configuration now uses a `generic_kwh` preset (0-7 kWh) if no preset is specified.
-- ✅ Version patch incremented.
-
-### v2.22.8
-- ✅ Fixed: `TIMEOUTS` ReferenceError resolved by importing `TIMEOUTS` in `cronostar-card.js`.
-- ✅ Improved: Watermark styling refined to be less intrusive (lighter color, no background).
-- ✅ Improved: Missing entities are now logged as a single, grouped message in the console.
-- ✅ Version patch incremented.
-
-### v2.22.7
-- ✅ Fixed: When `input_number` entities are missing, the card now uses default values and displays a clear warning message and a watermark on the chart.
-- ✅ Version patch incremented.
-
-### v2.22.6
-- ✅ Fixed: When loading presets with missing `input_number` entities, a clear message is now displayed listing the required entities.
-- ✅ Version patch incremented.
-
-### v2.22.5
-- ✅ Fixed: Logging is now correctly disabled at startup when `logging_enabled` is `false`.
-- ✅ Version patch incremented.
-
-### v2.22.4
-- ✅ Fixed: Logging toggle and preset selection now work correctly and close the menu.
-- ✅ Improved: Added warning logs when `input_number` entities are not found for a preset.
-- ✅ Version patch incremented.
-
-### v2.22.3
-- ✅ Fixed: Logging toggle and preset selection now work correctly and close the menu.
-- ✅ Version patch incremented.
-
-### v2.22.2
-- ✅ Added UI controls in the card's menu for `logging_enabled` and `preset` selection.
-- ✅ Fixed: Menu now closes after selecting logging or preset options.
-- ✅ Version patch incremented.
-
-### v2.22.0
-- ✅ Added `preset` option for quick configuration (`thermostat`, `ev_charging`).
-- ✅ Added `logging_enabled` option to control console output.
-- ✅ Versioning scheme updated to increment minor version for new features.
-
-### v2.21.0
-- ✅ Made the card generic for any scheduled value (e.g., EV charging power).
-- ✅ Added `y_axis_label`, `unit_of_measurement`, `min_value`, `max_value`, and `step_value` options.
-- ✅ Updated documentation with new options and examples.
-
-### v2.20.0
-- ✅ Added settings menu with language selection (EN/IT) and help.
-- ✅ Added Ctrl+A shortcut to select all points.
-- ✅ Changed arrow key behavior to align with leftmost/rightmost selected point.
-- ✅ Upgraded to Lit 3.
-- ✅ Fixed several bugs related to localization and component initialization.
 
 ## 🤝 Contributing
 

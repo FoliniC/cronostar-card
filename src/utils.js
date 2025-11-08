@@ -110,33 +110,66 @@ export function isDefined(value) {
 /**
  * Logging utility with tags
  */
-let loggingEnabled = false;
+const LOG_LEVELS = {
+  none: 0,
+  config: 1,
+  error: 2,
+  warn: 3,
+  info: 4,
+  debug: 5,
+  verbose: 6,
+};
+
+let currentLogLevel = LOG_LEVELS.info;
 
 export const Logger = {
-  setEnabled: (enabled) => {
-    loggingEnabled = !!enabled;
-    console.log('Logger.setEnabled called, loggingEnabled is now', loggingEnabled);
+  setLevel: (level) => {
+    if (level in LOG_LEVELS) {
+      currentLogLevel = LOG_LEVELS[level];
+      console.log(`[Logger] Log level set to '${level}'`);
+    }
   },
-  log: (tag, ...args) => {
-    if (loggingEnabled) {
-      console.log(`[${tag}]`, ...args);
+  error: (tag, ...args) => {
+    if (currentLogLevel >= LOG_LEVELS.error) {
+      console.error(`[${tag}]`, ...args);
     }
   },
   warn: (tag, ...args) => {
-    if (loggingEnabled) {
+    if (currentLogLevel >= LOG_LEVELS.warn) {
       console.warn(`[${tag}]`, ...args);
     }
   },
-  error: (tag, ...args) => console.error(`[${tag}]`, ...args),
-  
-  state: (...args) => Logger.log('STATE', ...args),
-  load: (...args) => Logger.log('LOAD', ...args),
-  save: (...args) => Logger.log('SAVE', ...args),
-  sel: (...args) => Logger.log('SEL', ...args),
-  memo: (...args) => Logger.log('MEMO', ...args),
-  diff: (...args) => Logger.log('DIFF', ...args),
-  key: (...args) => Logger.log('KEY', ...args),
-  base: (...args) => Logger.log('BASE', ...args),
+  info: (tag, ...args) => {
+    if (currentLogLevel >= LOG_LEVELS.info) {
+      console.log(`[${tag}]`, ...args);
+    }
+  },
+  debug: (tag, ...args) => {
+    if (currentLogLevel >= LOG_LEVELS.debug) {
+      console.log(`%c[${tag}]`, 'color: #03a9f4;', ...args);
+    }
+  },
+  verbose: (tag, ...args) => {
+    if (currentLogLevel >= LOG_LEVELS.verbose) {
+      console.log(`%c[${tag}]`, 'color: #9e9e9e;', ...args);
+    }
+  },
+
+  config: (tag, ...args) => {
+    if (currentLogLevel >= LOG_LEVELS.config) {
+      console.log(`%c[${tag}]`, 'color: #4caf50;', ...args);
+    }
+  },
+
+  // Aliases for specific log types
+  state: (...args) => Logger.debug('STATE', ...args),
+  load: (...args) => Logger.info('LOAD', ...args),
+  save: (...args) => Logger.info('SAVE', ...args),
+  sel: (...args) => Logger.debug('SEL', ...args),
+  memo: (...args) => Logger.debug('MEMO', ...args),
+  diff: (...args) => Logger.debug('DIFF', ...args),
+  key: (...args) => Logger.debug('KEY', ...args),
+  base: (...args) => Logger.info('BASE', ...args),
 };
 
 window.Logger = Logger;

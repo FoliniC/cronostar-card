@@ -3,7 +3,7 @@
  * @module config
  */
 
-export const VERSION = '3.0.0';
+export const VERSION = '3.3.0';
 
 export const PRESETS = {
   thermostat: {
@@ -16,8 +16,8 @@ export const PRESETS = {
     step_value: 0.5,
     pause_entity: "input_boolean.temperature_schedule_paused",
     profiles_select_entity: "input_select.temperature_profiles",
-    save_script: "script.save_temperature_profile",
-    load_script: "script.load_temperature_profile",
+    save_script: "script.cronostar_save_profile",
+    load_script: "script.cronostar_load_profile",
   },
   ev_charging: {
     title: "CronoStar EV Charging",
@@ -76,17 +76,21 @@ export const PRESETS = {
   }
 };
 
+export const LOG_LEVELS = ['none', 'config', 'error', 'warn', 'info', 'debug', 'verbose'];
+
 export const DEFAULT_CONFIG = {
   preset: 'thermostat', // Default to thermostat preset
   chartjs_path: "/local/chart.min.js",
   dragdata_path: "/local/chartjs-plugin-dragdata.min.js",
   hour_base: "auto", // 'auto' | 0 | 1
-  logging_enabled: false,
+  log_level: 'info',
   // These are now part of presets or can be overridden
   pause_entity: null,
   profiles_select_entity: null,
   save_script: null,
   load_script: null,
+  allow_max_value: false,
+  cronostar_custom_presets_entity: null,
 };
 
 export const CHART_DEFAULTS = {

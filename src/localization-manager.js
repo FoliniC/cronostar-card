@@ -19,7 +19,7 @@ const translations = {
     "menu.select_all": "Select All",
     "menu.help": "Help",
     "menu.language": "Language",
-    "menu.enable_logging": "Enable Logging",
+    "menu.log_level": "Log Level",
     "menu.select_preset": "Select Preset",
     "preset.thermostat": "Thermostat",
     "preset.ev_charging": "EV Charging",
@@ -48,7 +48,7 @@ const translations = {
     "menu.select_all": "Seleziona tutto",
     "menu.help": "Aiuto",
     "menu.language": "Lingua",
-    "menu.enable_logging": "Abilita Log",
+    "menu.log_level": "Livello Log",
     "menu.select_preset": "Seleziona Preset",
     "preset.thermostat": "Cronotermostato",
     "preset.ev_charging": "Ricarica EV",
@@ -60,7 +60,7 @@ const translations = {
   },
 };
 
-import { Logger } from './utils.js'; // Import Logger
+// No imports needed if getLovelace is not used
 
 export class LocalizationManager {
   localize(lang, key, search, replace) {

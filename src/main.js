@@ -4,6 +4,7 @@
  * @module main
  */
 
+import { Logger } from './utils.js';
 import { CronoStarCard } from './CronoStar.js';
 import { VERSION } from './config.js';
 
@@ -20,7 +21,7 @@ window.customCards.push({
   documentationURL: 'https://github.com/FoliniC/cronostar-card',
 });
 
-Logger.log(
+Logger.info(
   'MAIN',
   `%c CRONOSTAR %c v${VERSION} `,
   'color: white; background: #03a9f4; font-weight: 700;',

@@ -617,23 +617,443 @@ export const cardStyles = css`
 
   
 
-  .unsaved-indicator {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 4px;
-
-    font-size: 12px;
-
-    color: var(--warning-color, #ff9800);
-
-  }
+      .unsaved-indicator {
 
   
 
-  @media (max-width: 600px) {
+        display: inline-flex;
+
+  
+
+        align-items: center;
+
+  
+
+        gap: 4px;
+
+  
+
+        font-size: 12px;
+
+  
+
+        color: var(--warning-color, #ff9800);
+
+  
+
+      }
+
+  
+
+    
+
+  
+
+        input.info-value {
+
+  
+
+    
+
+  
+
+          text-align: right;
+
+  
+
+    
+
+  
+
+          border: none;
+
+  
+
+    
+
+  
+
+          background-color: transparent;
+
+  
+
+    
+
+  
+
+          color: var(--secondary-text-color);
+
+  
+
+    
+
+  
+
+          font-family: inherit;
+
+  
+
+    
+
+  
+
+          font-size: inherit;
+
+  
+
+    
+
+  
+
+          width: 100%;
+
+  
+
+    
+
+  
+
+          overflow: hidden;
+
+  
+
+    
+
+  
+
+          text-overflow: ellipsis;
+
+  
+
+    
+
+  
+
+          cursor: text;
+
+  
+
+    
+
+  
+
+        }
+
+  
+
+    
+
+  
+
+      
+
+  
+
+    
+
+  
+
+        .yaml-display {
+
+  
+
+    
+
+  
+
+          display: flex;
+
+  
+
+    
+
+  
+
+          flex-direction: column;
+
+  
+
+    
+
+  
+
+          padding: 16px;
+
+  
+
+    
+
+  
+
+        }
+
+  
+
+    
+
+  
+
+      
+
+  
+
+    
+
+  
+
+        .yaml-display p {
+
+  
+
+    
+
+  
+
+          margin-top: 0;
+
+  
+
+    
+
+  
+
+          font-size: 14px;
+
+  
+
+    
+
+  
+
+        }
+
+  
+
+    
+
+  
+
+      
+
+  
+
+    
+
+  
+
+        .yaml-display textarea {
+
+  
+
+    
+
+  
+
+          width: 100%;
+
+  
+
+    
+
+  
+
+          min-height: 150px;
+
+  
+
+    
+
+  
+
+          resize: vertical;
+
+  
+
+    
+
+  
+
+          box-sizing: border-box;
+
+  
+
+    
+
+  
+
+          background-color: var(--code-editor-background-color, #f4f4f4);
+
+  
+
+    
+
+  
+
+          color: var(--code-editor-text-color, #333);
+
+  
+
+    
+
+  
+
+          font-family: "Courier New", Courier, monospace;
+
+  
+
+    
+
+  
+
+          font-size: 13px;
+
+  
+
+    
+
+  
+
+          padding: 8px;
+
+  
+
+    
+
+  
+
+          border: 1px solid var(--divider-color);
+
+  
+
+    
+
+  
+
+          border-radius: 4px;
+
+  
+
+    
+
+  
+
+        }
+
+  
+
+    
+
+  
+
+      
+
+  
+
+    
+
+  
+
+        .menu-info {
+
+  
+
+      border-top: 1px solid var(--divider-color, #e0e0e0);
+
+  
+
+      margin-top: 8px;
+
+  
+
+      padding: 8px 16px;
+
+  
+
+      font-size: 12px;
+
+  
+
+      color: var(--secondary-text-color);
+
+  
+
+    }
+
+  
+
+  
+
+  
+
+    .info-row {
+
+  
+
+      display: flex;
+
+  
+
+      justify-content: space-between;
+
+  
+
+      margin-bottom: 4px;
+
+  
+
+    }
+
+  
+
+  
+
+  
+
+    .info-label {
+
+  
+
+      font-weight: bold;
+
+  
+
+      margin-right: 8px;
+
+  
+
+      flex-shrink: 0;
+
+  
+
+    }
+
+  
+
+  
+
+  
+
+    .info-value {
+
+  
+
+      text-align: right;
+
+  
+
+      word-break: break-all;
+
+  
+
+    }
+
+  
+
+    
+
+  
+
+    @media (max-width: 600px) {
 
     .controls {
 
