@@ -87,7 +87,24 @@ export class ProfileManager {
   async loadProfile(profileName) {
     this.card.stateManager.isLoadingProfile = true;
     
-    const profileTextEntityId = `input_text.ev_charging_profile_${profileName.toLowerCase().replace(/\s+/g, '_')}`;
+    const selectEntityId = this.card.config.profiles_select_entity;
+    let profileTextEntityPrefix = 'input_text.';
+    if (selectEntityId) {
+      const parts = selectEntityId.split('.');
+      if (parts.length === 2) {
+        let baseName = parts[1];
+        // Remove 's' if the base name ends with 's' (e.g., 'profiles' -> 'profile')
+        if (baseName.endsWith('s')) {
+          baseName = baseName.slice(0, -1);
+        }
+        profileTextEntityPrefix += `${baseName}_`;
+      }
+    } else {
+      // Fallback if profiles_select_entity is not configured, though it should be for profiles
+      profileTextEntityPrefix += 'profile_';
+    }
+
+    const profileTextEntityId = `${profileTextEntityPrefix}${profileName.toLowerCase().replace(/\s+/g, '_')}`;
     const profileTextState = this.card.hass.states[profileTextEntityId];
 
     if (!profileTextState || !profileTextState.state) {

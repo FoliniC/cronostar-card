@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.3.1 (2025-11-10)
+
+### Fixed
+- Corrected profile loading: The card now correctly constructs the `input_text` entity ID for profiles based on the `profiles_select_entity` configuration, resolving the "input_text entity not found or empty" error.
+
 ## 3.3.0 (2025-11-08)
 
 ### Added
